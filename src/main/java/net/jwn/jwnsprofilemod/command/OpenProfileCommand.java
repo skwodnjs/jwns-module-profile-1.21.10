@@ -32,6 +32,7 @@ public class OpenProfileCommand {
 
         if (player != null) {
             profile = data.getProfile(player);
+            data.setPlayerLevel(player, player.experienceLevel);
             packet = new OpenProfileScreenS2CPacket(profile, true);
         } else {
             profile = data.getProfile(name);

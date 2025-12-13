@@ -6,5 +6,6 @@
   "jwnsprofilemod.profile.guestbook": "방명록 보기",
   "jwnsprofilemod.profile.trade_request": "교환 신청",
   "jwnsprofilemod.profile.whisper": "귓속말",
-  "jwnsprofilemod.profile.search_failed": "프로필이 존재하지 않습니다."
+  "jwnsprofilemod.profile.search_failed": "프로필이 존재하지 않습니다.",
+  "jwnsprofilemod.profile.enter_about_me": "자기소개를 입력해주세요."
 }

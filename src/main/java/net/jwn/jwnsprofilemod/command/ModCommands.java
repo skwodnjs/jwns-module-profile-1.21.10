@@ -36,7 +36,7 @@ public class ModCommands {
             ProfileData.PlayerProfile profile;
             if (target != null) {
                 profile = data.getProfile(target);
-                profile.setLevel(target.experienceLevel);
+                data.setPlayerLevel(target, target.experienceLevel);
             } else {
                 profile = data.getProfile(name);
             }

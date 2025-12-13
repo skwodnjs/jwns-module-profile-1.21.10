@@ -2,6 +2,7 @@ package net.jwn.jwnsprofilemod.networking;
 
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.networking.client.OpenProfileScreenS2CPacketHandler;
+import net.jwn.jwnsprofilemod.networking.packet.EditAboutMeC2SPacket;
 import net.jwn.jwnsprofilemod.networking.packet.OpenProfileScreenS2CPacket;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -18,6 +19,11 @@ public class ModMessages {
                 OpenProfileScreenS2CPacket.TYPE,
                 OpenProfileScreenS2CPacket.STREAM_CODEC,
                 OpenProfileScreenS2CPacket::handle
+        );
+        registrar.playToServer(
+                EditAboutMeC2SPacket.TYPE,
+                EditAboutMeC2SPacket.STREAM_CODEC,
+                EditAboutMeC2SPacket::handle
         );
     }
 

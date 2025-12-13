@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
@@ -70,7 +71,7 @@ public class ProfileData extends SavedData {
         }
 
         public PlayerProfile(String name, UUID uuid) {
-            this(name, uuid, 0, 0L, "", List.of());
+            this(name, uuid, 0, 0L, Component.translatable("jwnsprofilemod.profile.enter_about_me").getString(), List.of());
         }
 
         public PlayerProfile(GameProfile profile) {
@@ -105,19 +106,19 @@ public class ProfileData extends SavedData {
 
         /* ===== setters ===== */
 
-        public void setLevel(int level) {
+        private void setLevel(int level) {
             this.level = level;
         }
 
-        public void setLastLogoutAt(Long lastLogoutAt) {
+        private void setLastLogoutAt(Long lastLogoutAt) {
             this.lastLogoutAt = lastLogoutAt;
         }
 
-        public void setAboutMe(String aboutMe) {
+        private void setAboutMe(String aboutMe) {
             this.aboutMe = aboutMe;
         }
 
-        public void setGuestbook(List<GuestbookEntry> guestbook) {
+        private void setGuestbook(List<GuestbookEntry> guestbook) {
             this.guestbook = guestbook;
         }
     }
@@ -179,6 +180,12 @@ public class ProfileData extends SavedData {
     public void setPlayerlastLogoutAt(Player player, Long time) {
         if (players.get(player.getUUID()) == null) return;
         players.get(player.getUUID()).setLastLogoutAt(time);
+        setDirty();
+    }
+
+    public void setPlayerAboutMe(Player player, String aboutMe) {
+        if (players.get(player.getUUID()) == null) return;
+        players.get(player.getUUID()).setAboutMe(aboutMe);
         setDirty();
     }
 }
