@@ -5,10 +5,10 @@ import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
 import net.jwn.jwnsprofilemod.util.Functions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -19,7 +19,6 @@ import net.minecraft.world.entity.player.PlayerSkin;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -60,7 +59,16 @@ public class ProfileScreen extends Screen {
         List<Runnable> actions = List.of(
                 () -> Minecraft.getInstance().setScreen(new GuestbookScreen(profile)),
                 this::onClose,
-                this::onClose
+                () -> {
+                    if (!isOnline && Minecraft.getInstance().player != null) {
+                        Minecraft.getInstance().player.displayClientMessage(
+                                Component.translatable("jwnsprofilemod.profile.whisper.offline"), false);
+                        onClose();
+                    }
+                    else {
+                        Minecraft.getInstance().setScreen(new ChatScreen("/tell " + profile.getName() + " ", false));
+                    }
+                }
         );
 
         for (int i = 0; i < 3; i++) {

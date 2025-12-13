@@ -10,5 +10,6 @@
   "jwnsprofilemod.profile.enter_about_me": "자기소개를 입력해주세요.",
   "jwnsprofilemod.profile_edit.save": "저장하기",
   "jwnsprofilemod.profile_edit.exit": "나가기",
-  "jwnsprofilemod.guestbook.title": "%s의 방명록"
+  "jwnsprofilemod.guestbook.title": "%s의 방명록",
+  "jwnsprofilemod.profile.whisper.offline": "플레이어가 현재 접속중이 아닙니다."
 }

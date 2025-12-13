@@ -10,5 +10,6 @@
   "jwnsprofilemod.profile.enter_about_me": "Please enter your bio.",
   "jwnsprofilemod.profile_edit.save": "save",
   "jwnsprofilemod.profile_edit.exit": "exit",
-  "jwnsprofilemod.guestbook.title": "%s's guestbook"
+  "jwnsprofilemod.guestbook.title": "%s's guestbook",
+  "jwnsprofilemod.profile.whisper.offline": "The player is currently offline."
 }
