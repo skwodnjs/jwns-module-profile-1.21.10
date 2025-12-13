@@ -2,7 +2,10 @@ package net.jwn.jwnsprofilemod.profile;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -42,6 +45,16 @@ public class ProfileData extends SavedData {
                         Codec.STRING.fieldOf("about_me").forGetter(PlayerProfile::getAboutMe),
                         GuestbookEntry.CODEC.listOf().fieldOf("guestbook").forGetter(PlayerProfile::getGuestbook)
                 ).apply(instance, PlayerProfile::new));
+
+        public static final StreamCodec<ByteBuf, PlayerProfile> STREAM_CODEC =
+                StreamCodec.composite(
+                        UUIDUtil.STREAM_CODEC, PlayerProfile::getPlayer,
+                        ByteBufCodecs.VAR_INT, PlayerProfile::getLevel,
+                        ByteBufCodecs.VAR_LONG, PlayerProfile::getLastLogoutAt,
+                        ByteBufCodecs.STRING_UTF8, PlayerProfile::getAboutMe,
+                        GuestbookEntry.STREAM_CODEC.apply(ByteBufCodecs.list()), PlayerProfile::getGuestbook,
+                        PlayerProfile::new
+                );
 
         public PlayerProfile(UUID player, int level, Long lastLogoutAt, String aboutMe, List<GuestbookEntry> guestbook) {
             this.player = player;
@@ -103,6 +116,14 @@ public class ProfileData extends SavedData {
                         UUIDUtil.CODEC.fieldOf("writer").forGetter(GuestbookEntry::writer),
                         Codec.STRING.fieldOf("message").forGetter(GuestbookEntry::message)
                 ).apply(instance, GuestbookEntry::new));
+
+        public static final StreamCodec<ByteBuf, GuestbookEntry> STREAM_CODEC =
+                StreamCodec.composite(
+                        ByteBufCodecs.VAR_LONG, GuestbookEntry::time,
+                        UUIDUtil.STREAM_CODEC, GuestbookEntry::writer,
+                        ByteBufCodecs.STRING_UTF8, GuestbookEntry::message,
+                        GuestbookEntry::new
+                );
     }
 
     private final Map<UUID, PlayerProfile> players;
@@ -130,6 +151,12 @@ public class ProfileData extends SavedData {
     public void setPlayerLevel(Player player, int level) {
         if (players.get(player.getUUID()) == null) return;
         players.get(player.getUUID()).setLevel(level);
+        setDirty();
+    }
+
+    public void setPlayerlastLogoutAt(Player player, Long time) {
+        if (players.get(player.getUUID()) == null) return;
+        players.get(player.getUUID()).setLastLogoutAt(time);
         setDirty();
     }
 }

@@ -25,6 +25,7 @@ public class ModEvents {
         if (player instanceof ServerPlayer serverPlayer) {
             ProfileData profileData = ProfileData.get(serverPlayer.level());
             profileData.setPlayerLevel(serverPlayer, serverPlayer.experienceLevel);
+            profileData.setPlayerlastLogoutAt(serverPlayer, System.currentTimeMillis());
         }
     }
 }
