@@ -1,3 +1,10 @@
 {
-
+  "jwnsprofilemod.minute": "minute",
+  "jwnsprofilemod.hour": "hour",
+  "jwnsprofilemod.profile.online": "online",
+  "jwnsprofilemod.profile.offline": "Last logout %s ago",
+  "jwnsprofilemod.profile.guestbook": "View Guestbook",
+  "jwnsprofilemod.profile.trade_request": "Request Trade",
+  "jwnsprofilemod.profile.whisper": "Whisper",
+  "jwnsprofilemod.profile.search_failed": "Profile not found."
 }

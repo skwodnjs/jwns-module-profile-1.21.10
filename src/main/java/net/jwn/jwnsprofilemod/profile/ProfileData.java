@@ -1,5 +1,6 @@
 package net.jwn.jwnsprofilemod.profile;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
@@ -31,7 +32,8 @@ public class ProfileData extends SavedData {
 
     public static class PlayerProfile {
 
-        private final UUID player;
+        private final String name;
+        private final UUID uuid;
         private int level;
         private Long lastLogoutAt;
         private String aboutMe;
@@ -39,7 +41,8 @@ public class ProfileData extends SavedData {
 
         public static final Codec<PlayerProfile> CODEC =
                 RecordCodecBuilder.create(instance -> instance.group(
-                        UUIDUtil.CODEC.fieldOf("player").forGetter(PlayerProfile::getPlayer),
+                        Codec.STRING.fieldOf("name").forGetter(PlayerProfile::getName),
+                        UUIDUtil.CODEC.fieldOf("uuid").forGetter(PlayerProfile::getUuid),
                         Codec.INT.fieldOf("level").forGetter(PlayerProfile::getLevel),
                         Codec.LONG.fieldOf("last_logout_at").forGetter(PlayerProfile::getLastLogoutAt),
                         Codec.STRING.fieldOf("about_me").forGetter(PlayerProfile::getAboutMe),
@@ -48,7 +51,8 @@ public class ProfileData extends SavedData {
 
         public static final StreamCodec<ByteBuf, PlayerProfile> STREAM_CODEC =
                 StreamCodec.composite(
-                        UUIDUtil.STREAM_CODEC, PlayerProfile::getPlayer,
+                        ByteBufCodecs.STRING_UTF8, PlayerProfile::getName,
+                        UUIDUtil.STREAM_CODEC, PlayerProfile::getUuid,
                         ByteBufCodecs.VAR_INT, PlayerProfile::getLevel,
                         ByteBufCodecs.VAR_LONG, PlayerProfile::getLastLogoutAt,
                         ByteBufCodecs.STRING_UTF8, PlayerProfile::getAboutMe,
@@ -56,22 +60,31 @@ public class ProfileData extends SavedData {
                         PlayerProfile::new
                 );
 
-        public PlayerProfile(UUID player, int level, Long lastLogoutAt, String aboutMe, List<GuestbookEntry> guestbook) {
-            this.player = player;
+        public PlayerProfile(String name, UUID uuid, int level, Long lastLogoutAt, String aboutMe, List<GuestbookEntry> guestbook) {
+            this.name = name;
+            this.uuid = uuid;
             this.level = level;
             this.lastLogoutAt = lastLogoutAt;
             this.aboutMe = aboutMe;
             this.guestbook = guestbook;
         }
 
-        public PlayerProfile(UUID player) {
-            this(player, 0, 0L, "", List.of());
+        public PlayerProfile(String name, UUID uuid) {
+            this(name, uuid, 0, 0L, "", List.of());
+        }
+
+        public PlayerProfile(GameProfile profile) {
+            this(profile.name(), profile.id());
         }
 
         /* ===== getters ===== */
 
-        public UUID getPlayer() {
-            return player;
+        public String getName() {
+            return name;
+        }
+
+        public UUID getUuid() {
+            return uuid;
         }
 
         public int getLevel() {
@@ -144,8 +157,17 @@ public class ProfileData extends SavedData {
         return players.get(player.getUUID());
     }
 
+    public PlayerProfile getProfile(String name) {
+        for (PlayerProfile profile : players.values()) {
+            if (profile.getName().equals(name)) {
+                return profile;
+            }
+        }
+        return null;
+    }
+
     public void createPlayerProfileIfAbsent(Player player) {
-        players.computeIfAbsent(player.getUUID(), PlayerProfile::new);
+        players.computeIfAbsent(player.getGameProfile().id(), uuid -> new PlayerProfile(player.getGameProfile()));
     }
 
     public void setPlayerLevel(Player player, int level) {
