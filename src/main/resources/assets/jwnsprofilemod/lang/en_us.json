@@ -9,5 +9,6 @@
   "jwnsprofilemod.profile.search_failed": "Profile not found.",
   "jwnsprofilemod.profile.enter_about_me": "Please enter your bio.",
   "jwnsprofilemod.profile_edit.save": "save",
-  "jwnsprofilemod.profile_edit.exit": "exit"
+  "jwnsprofilemod.profile_edit.exit": "exit",
+  "jwnsprofilemod.guestbook.title": "%s's guestbook"
 }

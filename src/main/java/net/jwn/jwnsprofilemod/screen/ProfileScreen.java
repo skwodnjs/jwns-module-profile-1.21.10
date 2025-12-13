@@ -3,6 +3,7 @@ package net.jwn.jwnsprofilemod.screen;
 import com.mojang.authlib.GameProfile;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
+import net.jwn.jwnsprofilemod.util.Functions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -55,12 +56,21 @@ public class ProfileScreen extends Screen {
     protected void init() {
         x = (this.width - DRAW_WIDTH) / 2;
         y = (this.height - DRAW_HEIGHT) / 2;
+
+        List<Runnable> actions = List.of(
+                () -> Minecraft.getInstance().setScreen(new GuestbookScreen(profile)),
+                this::onClose,
+                this::onClose
+        );
+
         for (int i = 0; i < 3; i++) {
+            final int idx = i;
             addRenderableWidget(new ImageButton(
                     (this.width - BUTTON_WIDTH) / 2, y + 105 + i * 18, BUTTON_WIDTH, BUTTON_HEIGHT,
-                    new WidgetSprites(BUTTON, BUTTON_PRESSED), button -> this.onClose()
+                    new WidgetSprites(BUTTON, BUTTON_PRESSED), button -> actions.get(idx).run()
             ));
         }
+
         Player player = Minecraft.getInstance().player;
         assert player != null;
         if (Objects.equals(player.getUUID(), profile.getUuid())) {
@@ -75,6 +85,7 @@ public class ProfileScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        setFocused(null);
         graphics.blit(
                 RenderPipelines.GUI_TEXTURED, BG, x, y,
                 0.0F, 0.0F, DRAW_WIDTH, DRAW_HEIGHT,
@@ -117,7 +128,7 @@ public class ProfileScreen extends Screen {
         int startX = x + 13;
         int startY = y + 73;
 
-        List<FormattedCharSequence> lines = wrapByCharacter(text, maxWidth, this.font);
+        List<FormattedCharSequence> lines = Functions.wrapByCharacter(text, maxWidth, this.font);
 
         int lineHeight = this.font.lineHeight;
 
@@ -139,29 +150,5 @@ public class ProfileScreen extends Screen {
         graphics.drawString(this.font, text1, (this.width - font.width(text1)) / 2, y + 108, 0xFF000000, false);
         graphics.drawString(this.font, text2, (this.width - font.width(text2)) / 2, y + 126, 0xFF000000, false);
         graphics.drawString(this.font, text3, (this.width - font.width(text3)) / 2, y + 144, 0xFF000000, false);
-    }
-
-    private List<FormattedCharSequence> wrapByCharacter(Component text, int maxWidth, Font font) {
-        String raw = text.getString();
-        List<FormattedCharSequence> result = new ArrayList<>();
-
-        StringBuilder currentLine = new StringBuilder();
-
-        for (int i = 0; i < raw.length(); i++) {
-            char c = raw.charAt(i);
-            currentLine.append(c);
-
-            int width = font.width(currentLine.toString());
-            if (width > maxWidth) {
-                currentLine.deleteCharAt(currentLine.length() - 1);
-                result.add(font.split(Component.literal(currentLine.toString()), maxWidth).getFirst());
-                currentLine.setLength(0);
-                currentLine.append(c);
-            }
-        }
-        if (!currentLine.isEmpty()) {
-            result.add(font.split(Component.literal(currentLine.toString()), maxWidth).getFirst());
-        }
-        return result;
     }
 }

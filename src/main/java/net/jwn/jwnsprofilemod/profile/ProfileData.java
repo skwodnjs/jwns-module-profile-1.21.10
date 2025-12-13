@@ -13,10 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ProfileData extends SavedData {
 
@@ -121,20 +118,26 @@ public class ProfileData extends SavedData {
         private void setGuestbook(List<GuestbookEntry> guestbook) {
             this.guestbook = guestbook;
         }
+
+        private void addGuestbook(GuestbookEntry guestbook) {
+            List<GuestbookEntry> newList = new ArrayList<>(this.guestbook);
+            newList.add(guestbook);
+            this.guestbook = newList;
+        }
     }
 
-    public record GuestbookEntry(Long time, UUID writer, String message) {
+    public record GuestbookEntry(Long time, String writer, String message) {
         public static final Codec<GuestbookEntry> CODEC =
                 RecordCodecBuilder.create(instance -> instance.group(
                         Codec.LONG.fieldOf("time").forGetter(GuestbookEntry::time),
-                        UUIDUtil.CODEC.fieldOf("writer").forGetter(GuestbookEntry::writer),
+                        Codec.STRING.fieldOf("writer").forGetter(GuestbookEntry::writer),
                         Codec.STRING.fieldOf("message").forGetter(GuestbookEntry::message)
                 ).apply(instance, GuestbookEntry::new));
 
         public static final StreamCodec<ByteBuf, GuestbookEntry> STREAM_CODEC =
                 StreamCodec.composite(
                         ByteBufCodecs.VAR_LONG, GuestbookEntry::time,
-                        UUIDUtil.STREAM_CODEC, GuestbookEntry::writer,
+                        ByteBufCodecs.STRING_UTF8, GuestbookEntry::writer,
                         ByteBufCodecs.STRING_UTF8, GuestbookEntry::message,
                         GuestbookEntry::new
                 );
@@ -186,6 +189,12 @@ public class ProfileData extends SavedData {
     public void setPlayerAboutMe(Player player, String aboutMe) {
         if (players.get(player.getUUID()) == null) return;
         players.get(player.getUUID()).setAboutMe(aboutMe);
+        setDirty();
+    }
+
+    public void addPlayerGuestbook(Player player, GuestbookEntry guestbookEntry) {
+        if (players.get(player.getUUID()) == null) return;
+        players.get(player.getUUID()).addGuestbook(guestbookEntry);
         setDirty();
     }
 }

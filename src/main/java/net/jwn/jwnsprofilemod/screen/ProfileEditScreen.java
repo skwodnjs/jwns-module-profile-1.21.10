@@ -3,6 +3,7 @@ package net.jwn.jwnsprofilemod.screen;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.networking.packet.EditAboutMeC2SPacket;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
+import net.jwn.jwnsprofilemod.util.Functions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -74,6 +75,7 @@ public class ProfileEditScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        setFocused(null);
         graphics.blit(
                 RenderPipelines.GUI_TEXTURED, BG, x, y,
                 0.0F, 0.0F, DRAW_WIDTH, DRAW_HEIGHT,
@@ -82,10 +84,11 @@ public class ProfileEditScreen extends Screen {
 
         super.render(graphics, mouseX, mouseY, partialTicks);
 
+        graphics.drawString(this.font, this.title, x + 13, y + 8, 0xFF000000, false);
+
         Component text = Component.literal(profile.getAboutMe());
         int maxWidth = DRAW_WIDTH - 26;
-        graphics.drawString(this.font, this.title, x + 13, y + 8, 0xFF000000, false);
-        List<FormattedCharSequence> lines = wrapByCharacter(text, maxWidth, this.font);
+        List<FormattedCharSequence> lines = Functions.wrapByCharacter(text, maxWidth, this.font);
 
         int lineHeight = this.font.lineHeight;
 
@@ -105,29 +108,5 @@ public class ProfileEditScreen extends Screen {
 
         graphics.drawString(this.font, text2, (this.width - font.width(text2)) / 2, y + 126, 0xFF000000, false);
         graphics.drawString(this.font, text3, (this.width - font.width(text3)) / 2, y + 144, 0xFF000000, false);
-    }
-
-    private List<FormattedCharSequence> wrapByCharacter(Component text, int maxWidth, Font font) {
-        String raw = text.getString();
-        List<FormattedCharSequence> result = new ArrayList<>();
-
-        StringBuilder currentLine = new StringBuilder();
-
-        for (int i = 0; i < raw.length(); i++) {
-            char c = raw.charAt(i);
-            currentLine.append(c);
-
-            int width = font.width(currentLine.toString());
-            if (width > maxWidth) {
-                currentLine.deleteCharAt(currentLine.length() - 1);
-                result.add(font.split(Component.literal(currentLine.toString()), maxWidth).getFirst());
-                currentLine.setLength(0);
-                currentLine.append(c);
-            }
-        }
-        if (!currentLine.isEmpty()) {
-            result.add(font.split(Component.literal(currentLine.toString()), maxWidth).getFirst());
-        }
-        return result;
     }
 }
