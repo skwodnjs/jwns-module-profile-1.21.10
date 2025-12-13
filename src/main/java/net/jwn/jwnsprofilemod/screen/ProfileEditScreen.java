@@ -100,8 +100,8 @@ public class ProfileEditScreen extends Screen {
             );
         }
 
-        Component text2 = Component.literal("나가기");
-        Component text3 = Component.literal("저장하기");
+        Component text2 = Component.translatable("jwnsprofilemod.profile_edit.save");
+        Component text3 = Component.translatable("jwnsprofilemod.profile_edit.exit");
 
         graphics.drawString(this.font, text2, (this.width - font.width(text2)) / 2, y + 126, 0xFF000000, false);
         graphics.drawString(this.font, text3, (this.width - font.width(text3)) / 2, y + 144, 0xFF000000, false);

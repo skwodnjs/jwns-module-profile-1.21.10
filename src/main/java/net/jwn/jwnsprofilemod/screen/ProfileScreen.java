@@ -1,5 +1,6 @@
 package net.jwn.jwnsprofilemod.screen;
 
+import com.mojang.authlib.GameProfile;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
 import net.minecraft.client.Minecraft;
@@ -13,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.PlayerSkin;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -47,6 +49,8 @@ public class ProfileScreen extends Screen {
     int x;
     int y;
 
+    private volatile PlayerSkin cachedSkin;
+
     @Override
     protected void init() {
         x = (this.width - DRAW_WIDTH) / 2;
@@ -65,6 +69,8 @@ public class ProfileScreen extends Screen {
                     button -> Minecraft.getInstance().setScreen(new ProfileEditScreen(profile))
             ));
         }
+        Minecraft.getInstance().getSkinManager().get(new GameProfile(profile.getUuid(), profile.getName()))
+                .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin = playerSkin));
     }
 
     @Override
@@ -74,6 +80,19 @@ public class ProfileScreen extends Screen {
                 0.0F, 0.0F, DRAW_WIDTH, DRAW_HEIGHT,
                 DRAW_WIDTH, DRAW_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT
         );
+
+        if (cachedSkin != null) {
+            graphics.blit(
+                    RenderPipelines.GUI_TEXTURED, cachedSkin.body().texturePath(), x + 10, y + 11,
+                    8.0F, 8.0F, 43, 43,
+                    8, 8, 64, 64
+            );
+            graphics.blit(
+                    RenderPipelines.GUI_TEXTURED, cachedSkin.body().texturePath(), x + 10, y + 11,
+                    40.0F, 8.0F, 43, 43,
+                    8, 8, 64, 64
+            );
+        }
 
         super.render(graphics, mouseX, mouseY, partialTicks);
 
