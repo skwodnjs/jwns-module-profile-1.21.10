@@ -1,15 +1,17 @@
 {
   "jwnsprofilemod.minute": "분",
   "jwnsprofilemod.hour": "시간",
-  "jwnsprofilemod.profile.online": "접속중",
-  "jwnsprofilemod.profile.offline": "%s 전 접속 종료",
+  "jwnsprofilemod.profile.status.online": "접속중",
+  "jwnsprofilemod.profile.status.offline": "%s 전 접속 종료",
   "jwnsprofilemod.profile.guestbook": "방명록 보기",
-  "jwnsprofilemod.profile.trade_request": "교환 신청",
+  "jwnsprofilemod.profile.trade_request": "교환 요청",
   "jwnsprofilemod.profile.whisper": "귓속말",
   "jwnsprofilemod.profile.search_failed": "프로필이 존재하지 않습니다.",
   "jwnsprofilemod.profile.enter_about_me": "자기소개를 입력해주세요.",
   "jwnsprofilemod.profile_edit.save": "저장하기",
   "jwnsprofilemod.profile_edit.exit": "나가기",
   "jwnsprofilemod.guestbook.title": "%s의 방명록",
-  "jwnsprofilemod.profile.whisper.offline": "플레이어가 현재 접속중이 아닙니다."
+  "jwnsprofilemod.profile.offline_message": "플레이어가 현재 접속중이 아닙니다.",
+  "jwnsprofilemod.profile.cannot_trade_yourself": "본인과는 거래할 수 없습니다.",
+  "jwnsprofilemod.trade.title": "교환하기"
 }

@@ -1,8 +1,8 @@
 {
   "jwnsprofilemod.minute": "minute",
   "jwnsprofilemod.hour": "hour",
-  "jwnsprofilemod.profile.online": "online",
-  "jwnsprofilemod.profile.offline": "Last logout %s ago",
+  "jwnsprofilemod.profile.status.online": "online",
+  "jwnsprofilemod.profile.status.offline": "Last logout %s ago",
   "jwnsprofilemod.profile.guestbook": "View Guestbook",
   "jwnsprofilemod.profile.trade_request": "Request Trade",
   "jwnsprofilemod.profile.whisper": "Whisper",
@@ -11,5 +11,7 @@
   "jwnsprofilemod.profile_edit.save": "save",
   "jwnsprofilemod.profile_edit.exit": "exit",
   "jwnsprofilemod.guestbook.title": "%s's guestbook",
-  "jwnsprofilemod.profile.whisper.offline": "The player is currently offline."
+  "jwnsprofilemod.profile.offline_message": "The player is currently offline.",
+  "jwnsprofilemod.profile.cannot_trade_yourself": "You cannot trade with yourself.",
+  "jwnsprofilemod.trade.title": "Trade"
 }

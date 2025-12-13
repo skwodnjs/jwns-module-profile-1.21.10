@@ -115,10 +115,6 @@ public class ProfileData extends SavedData {
             this.aboutMe = aboutMe;
         }
 
-        private void setGuestbook(List<GuestbookEntry> guestbook) {
-            this.guestbook = guestbook;
-        }
-
         private void addGuestbook(GuestbookEntry guestbook) {
             List<GuestbookEntry> newList = new ArrayList<>(this.guestbook);
             newList.addFirst(guestbook);

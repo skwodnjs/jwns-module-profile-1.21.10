@@ -25,9 +25,9 @@ import java.util.Objects;
 public class ProfileScreen extends Screen {
     private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "textures/gui/profile_gui.png");
     private static final ResourceLocation BUTTON = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "button");
-    private static final ResourceLocation BUTTON_PRESSED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "button_highlighted");
+    private static final ResourceLocation BUTTON_HIGHLIGHTED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "button_highlighted");
     private static final ResourceLocation EDIT_BUTTON = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "edit_button");
-    private static final ResourceLocation EDIT_BUTTON_PRESSED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "edit_button_highlighted");
+    private static final ResourceLocation EDIT_BUTTON_HIGHLIGHTED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "edit_button_highlighted");
 
     private final ProfileData.PlayerProfile profile;
     private final boolean isOnline;
@@ -57,12 +57,31 @@ public class ProfileScreen extends Screen {
         y = (this.height - DRAW_HEIGHT) / 2;
 
         List<Runnable> actions = List.of(
+                // 방명록
                 () -> Minecraft.getInstance().setScreen(new GuestbookScreen(profile)),
-                this::onClose,
+                // 교환 요청
                 () -> {
                     if (!isOnline && Minecraft.getInstance().player != null) {
                         Minecraft.getInstance().player.displayClientMessage(
-                                Component.translatable("jwnsprofilemod.profile.whisper.offline"), false);
+                                Component.translatable("jwnsprofilemod.profile.offline_message"), false);
+                        onClose();
+                    } else {
+//                        assert Minecraft.getInstance().player != null;
+//                        if (Objects.equals(Minecraft.getInstance().player.getUUID(), profile.getUuid())) {
+//                            Minecraft.getInstance().player.displayClientMessage(
+//                                    Component.translatable("jwnsprofilemod.profile.cannot_trade_yourself"), false);
+//                            onClose();
+//                        } else {
+//                            Minecraft.getInstance().setScreen(new TradeScreen(profile));
+//                        }
+                        Minecraft.getInstance().setScreen(new TradeScreen(profile));
+                    }
+                },
+                // 귓속말
+                () -> {
+                    if (!isOnline && Minecraft.getInstance().player != null) {
+                        Minecraft.getInstance().player.displayClientMessage(
+                                Component.translatable("jwnsprofilemod.profile.offline_message"), false);
                         onClose();
                     }
                     else {
@@ -75,7 +94,7 @@ public class ProfileScreen extends Screen {
             final int idx = i;
             addRenderableWidget(new ImageButton(
                     (this.width - BUTTON_WIDTH) / 2, y + 105 + i * 18, BUTTON_WIDTH, BUTTON_HEIGHT,
-                    new WidgetSprites(BUTTON, BUTTON_PRESSED), button -> actions.get(idx).run()
+                    new WidgetSprites(BUTTON, BUTTON_HIGHLIGHTED), button -> actions.get(idx).run()
             ));
         }
 
@@ -83,7 +102,7 @@ public class ProfileScreen extends Screen {
         assert player != null;
         if (Objects.equals(player.getUUID(), profile.getUuid())) {
             addRenderableWidget(new ImageButton(
-                    x + 94, y + 89, 7, 7, new WidgetSprites(EDIT_BUTTON, EDIT_BUTTON_PRESSED),
+                    x + 94, y + 89, 7, 7, new WidgetSprites(EDIT_BUTTON, EDIT_BUTTON_HIGHLIGHTED),
                     button -> Minecraft.getInstance().setScreen(new ProfileEditScreen(profile))
             ));
         }
@@ -120,13 +139,13 @@ public class ProfileScreen extends Screen {
 
         Component logoutAt;
         if (isOnline) {
-            logoutAt = Component.translatable("jwnsprofilemod.profile.online");
+            logoutAt = Component.translatable("jwnsprofilemod.profile.status.online");
         } else {
             Instant now = Instant.now();
             Duration duration = Duration.between(Instant.ofEpochMilli(profile.getLastLogoutAt()), now);
             int gap = (duration.toMinutes() <= 60) ? (int) duration.toMinutes() : (int) duration.toHours();
             String key = (duration.toMinutes() <= 60) ? "jwnsprofilemod.minute" : "jwnsprofilemod.hour";
-            logoutAt = Component.translatable("jwnsprofilemod.profile.offline", gap + " " + Component.translatable(key).getString());
+            logoutAt = Component.translatable("jwnsprofilemod.profile.status.offline", gap + " " + Component.translatable(key).getString());
         }
 
         graphics.drawString(this.font, logoutAt, x + 10, y + 57, 0xFF000000, false);
