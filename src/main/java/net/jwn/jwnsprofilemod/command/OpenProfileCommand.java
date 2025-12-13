@@ -36,12 +36,13 @@ public class OpenProfileCommand {
             packet = new OpenProfileScreenS2CPacket(profile, true);
         } else {
             profile = data.getProfile(name);
-            packet = new OpenProfileScreenS2CPacket(profile, false);
+            if (profile != null) packet = new OpenProfileScreenS2CPacket(profile, false);
+            else {
+                if (context.getSource().getPlayer() != null)
+                    context.getSource().getPlayer().displayClientMessage(Component.translatable("jwnsprofilemod.profile.search_failed"), false);
+                return 0;
+            }
         }
-        if (profile == null && context.getSource().getPlayer() != null) {
-            context.getSource().getPlayer().displayClientMessage(Component.translatable("jwnsprofilemod.profile.search_failed"), false);
-        }
-
         PacketDistributor.sendToPlayer(Objects.requireNonNull(context.getSource().getPlayer()), packet);
         return 1;
     }

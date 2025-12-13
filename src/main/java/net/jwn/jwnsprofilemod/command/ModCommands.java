@@ -26,23 +26,9 @@ public class ModCommands {
             dispatcher.register(Commands.literal("test").executes(this::execute));
         }
         private int execute(CommandContext<CommandSourceStack> context) {
-            ServerPlayer player = context.getSource().getPlayer();
-            if (player == null) return 0;
 
-            String name = "JWN__";
-            ServerPlayer target = player.level().getServer().getPlayerList().getPlayer(name);
-            ProfileData data = ProfileData.get(player.level());
 
-            ProfileData.PlayerProfile profile;
-            if (target != null) {
-                profile = data.getProfile(target);
-                data.setPlayerLevel(target, target.experienceLevel);
-            } else {
-                profile = data.getProfile(name);
-            }
-
-            if (profile == null) return 0;
-            PacketDistributor.sendToPlayer(player, new OpenProfileScreenS2CPacket(profile, target != null));
+            
             return 1;
         }
     }
