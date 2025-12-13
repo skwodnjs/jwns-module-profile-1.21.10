@@ -131,7 +131,8 @@ public class ProfileScreen extends Screen {
 
         graphics.drawString(this.font, logoutAt, x + 10, y + 57, 0xFF000000, false);
 
-        Component text = Component.literal(profile.getAboutMe());
+        Component text = (Objects.equals(profile.getAboutMe(), ""))
+                ? Component.translatable("jwnsprofilemod.profile.enter_about_me") : Component.literal(profile.getAboutMe());
         int maxWidth = DRAW_WIDTH - 26;
         int startX = x + 13;
         int startY = y + 73;

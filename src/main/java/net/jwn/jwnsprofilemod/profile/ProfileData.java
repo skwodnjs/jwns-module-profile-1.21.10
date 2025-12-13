@@ -68,7 +68,7 @@ public class ProfileData extends SavedData {
         }
 
         public PlayerProfile(String name, UUID uuid) {
-            this(name, uuid, 0, 0L, Component.translatable("jwnsprofilemod.profile.enter_about_me").getString(), List.of());
+            this(name, uuid, 0, 0L, "", List.of());
         }
 
         public PlayerProfile(GameProfile profile) {
