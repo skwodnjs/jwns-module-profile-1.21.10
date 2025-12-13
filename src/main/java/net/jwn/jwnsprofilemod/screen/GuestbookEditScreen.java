@@ -1,9 +1,8 @@
 package net.jwn.jwnsprofilemod.screen;
 
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
-import net.jwn.jwnsprofilemod.networking.packet.EditAboutMeC2SPacket;
+import net.jwn.jwnsprofilemod.networking.packet.AddGuestbookMessageC2SPacket;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
-import net.jwn.jwnsprofilemod.util.Functions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
@@ -13,21 +12,17 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FormattedCharSequence;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
-import java.util.List;
-
-public class ProfileEditScreen extends Screen {
+public class GuestbookEditScreen extends Screen {
     private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "textures/gui/edit_gui.png");
     private static final ResourceLocation BUTTON = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "button");
     private static final ResourceLocation BUTTON_PRESSED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "button_highlighted");
     private final ProfileData.PlayerProfile profile;
-    private static String aboutMe = "";
+    private static String message = "";
 
-
-    protected ProfileEditScreen(ProfileData.PlayerProfile profile) {
-        super(Component.literal(profile.getName()));
+    protected GuestbookEditScreen(ProfileData.PlayerProfile profile) {
+        super(Component.translatable("jwnsprofilemod.guestbook.title", profile.getName()));
         this.profile = profile;
     }
 
@@ -55,19 +50,25 @@ public class ProfileEditScreen extends Screen {
         ImageButton imageButton3 = new ImageButton(
                 (this.width - BUTTON_WIDTH) / 2, y + 105 + 36, BUTTON_WIDTH, BUTTON_HEIGHT, new WidgetSprites(BUTTON, BUTTON_PRESSED),
                 button -> {
+                    System.out.println("PRESSED");
                     assert Minecraft.getInstance().player != null;
-                    EditAboutMeC2SPacket packet = new EditAboutMeC2SPacket(aboutMe);
+                    ProfileData.GuestbookEntry guestbookEntry = new ProfileData.GuestbookEntry(
+                            System.currentTimeMillis(),
+                            Minecraft.getInstance().player.getPlainTextName(),
+                            message
+                    );
+                    AddGuestbookMessageC2SPacket packet = new AddGuestbookMessageC2SPacket(profile, guestbookEntry);
                     ClientPacketDistributor.sendToServer(packet);
                     this.onClose();
                 });
         addRenderableWidget(imageButton3);
 
         MultiLineEditBox editBox = MultiLineEditBox.builder().build(
-                this.font, 90, 66, Component.empty()
+                this.font, 90, 99, Component.empty()
         );
         editBox.setX(x + 10);
-        editBox.setY(y + 53);
-        editBox.setValueListener(text -> aboutMe = text);
+        editBox.setY(y + 20);
+        editBox.setValueListener(text -> message = text);
         addRenderableWidget(editBox);
     }
 
@@ -82,23 +83,6 @@ public class ProfileEditScreen extends Screen {
         super.render(graphics, mouseX, mouseY, partialTicks);
 
         graphics.drawString(this.font, this.title, x + 13, y + 8, 0xFF000000, false);
-
-        Component text = Component.literal(profile.getAboutMe());
-        int maxWidth = DRAW_WIDTH - 26;
-        List<FormattedCharSequence> lines = Functions.wrapByCharacter(text, maxWidth, this.font);
-
-        int lineHeight = this.font.lineHeight;
-
-        for (int i = 0; i < lines.size(); i++) {
-            graphics.drawString(
-                    this.font,
-                    lines.get(i),
-                    x + 13,
-                    y + 24 + (i * lineHeight) + 1,
-                    0xFF000000,
-                    false
-            );
-        }
 
         Component text2 = Component.translatable("jwnsprofilemod.profile_edit.exit");
         Component text3 = Component.translatable("jwnsprofilemod.profile_edit.save");

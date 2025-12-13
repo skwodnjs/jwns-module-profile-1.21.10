@@ -192,9 +192,13 @@ public class ProfileData extends SavedData {
         setDirty();
     }
 
-    public void addPlayerGuestbook(Player player, GuestbookEntry guestbookEntry) {
-        if (players.get(player.getUUID()) == null) return;
-        players.get(player.getUUID()).addGuestbook(guestbookEntry);
-        setDirty();
+    public void addPlayerGuestbook(String name, GuestbookEntry guestbookEntry) {
+        for (PlayerProfile profile : players.values()) {
+            if (profile.getName().equals(name)) {
+                profile.addGuestbook(guestbookEntry);
+                setDirty();
+                return;
+            }
+        }
     }
 }

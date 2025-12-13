@@ -3,6 +3,7 @@ package net.jwn.jwnsprofilemod.screen;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
 import net.jwn.jwnsprofilemod.util.Functions;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -46,7 +47,7 @@ public class GuestbookScreen extends Screen {
 
         addRenderableWidget(new ImageButton(
                 x + 158, y + 11, 7, 7, new WidgetSprites(EDIT_BUTTON, EDIT_BUTTON_PRESSED),
-                button -> {}
+                button -> Minecraft.getInstance().setScreen(new GuestbookEditScreen(profile))
         ));
 
         addRenderableWidget(new ImageButton(
@@ -79,13 +80,16 @@ public class GuestbookScreen extends Screen {
         for (int i = 0; i < 3; i++) {
             if (index + i < profile.getGuestbook().size()) {
                 ProfileData.GuestbookEntry entry = profile.getGuestbook().get(index + i);
-                graphics.drawString(this.font, entry.writer(), x + 11, y + 23 + i * 42, 0xFF000000, false);
+                String time = java.time.Instant.ofEpochMilli(entry.time())
+                        .atZone(java.time.ZoneId.systemDefault())
+                        .format(java.time.format.DateTimeFormatter.ofPattern("yyyy/M/d HH:mm"));
+                graphics.drawString(this.font, entry.writer() + " (" + time + ")", x + 11, y + 23 + i * 42, 0xFF000000, false);
                 Component text = Component.literal(entry.message());
                 int maxWidth = 154;
                 List<FormattedCharSequence> lines = Functions.wrapByCharacter(text, maxWidth, this.font);
                 int lineHeight = this.font.lineHeight;
-                for (int j = 0; j < 3; j++) {
-                    graphics.drawString(this.font, lines.get(j), x + 11, y + 33 + i * 42 + j * lineHeight,
+                for (int j = 0; j < lines.size() && j < 3; j++) {
+                    graphics.drawString(this.font, lines.get(j), x + 11, y + 34 + i * 42 + j * lineHeight,
                             0xFF000000, false);
                 }
             }
