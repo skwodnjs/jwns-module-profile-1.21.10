@@ -6,6 +6,7 @@ import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.networking.packet.RequestTradeS2CPacket;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -25,7 +26,8 @@ public class ModCommands {
         }
         private int execute(CommandContext<CommandSourceStack> context) {
             if (context.getSource().getPlayer() != null) {
-                RequestTradeS2CPacket packet = new RequestTradeS2CPacket(context.getSource().getPlayer().getUUID());
+                Player player = context.getSource().getPlayer();
+                RequestTradeS2CPacket packet = new RequestTradeS2CPacket(player.getUUID(), player.getPlainTextName());
                 PacketDistributor.sendToPlayer(context.getSource().getPlayer(), packet);
             }
             return 1;
