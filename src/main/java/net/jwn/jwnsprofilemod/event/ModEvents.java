@@ -2,11 +2,15 @@ package net.jwn.jwnsprofilemod.event;
 
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
+import net.jwn.jwnsprofilemod.trade.TradeRequestToast;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 
 @EventBusSubscriber(modid = JWNsProfileMod.MOD_ID)
 public class ModEvents {
@@ -26,6 +30,20 @@ public class ModEvents {
             ProfileData profileData = ProfileData.get(serverPlayer.level());
             profileData.setPlayerLevel(serverPlayer, serverPlayer.experienceLevel);
             profileData.setPlayerlastLogoutAt(serverPlayer, System.currentTimeMillis());
+        }
+    }
+
+    @SubscribeEvent
+    public static void test(UseItemOnBlockEvent event) {
+        Player player = event.getPlayer();
+        if (player instanceof ServerPlayer serverPlayer) {
+
+        } else {
+            ToastManager manager = Minecraft.getInstance().getToastManager();
+            TradeRequestToast toast = manager.getToast(TradeRequestToast.class, TradeRequestToast.TOKEN);
+            if (toast != null) {
+                toast.hide();
+            }
         }
     }
 }

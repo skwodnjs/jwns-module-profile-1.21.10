@@ -3,6 +3,7 @@ package net.jwn.jwnsprofilemod.networking;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.networking.client.OpenProfileScreenS2CPacketHandler;
 import net.jwn.jwnsprofilemod.networking.client.RequestTradeS2CPacketHandler;
+import net.jwn.jwnsprofilemod.networking.client.TradeRequestHandleS2CPacketHandler;
 import net.jwn.jwnsprofilemod.networking.packet.*;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,6 +26,12 @@ public class ModMessages {
                 RequestTradeS2CPacket.STREAM_CODEC,
                 RequestTradeS2CPacket::handle
         );
+        registrar.playBidirectional(
+                TradeRequestHandleS2CPacket.TYPE,
+                TradeRequestHandleS2CPacket.STREAM_CODEC,
+                TradeRequestHandleS2CPacket::handle
+        );
+
         registrar.playToServer(
                 EditAboutMeC2SPacket.TYPE,
                 EditAboutMeC2SPacket.STREAM_CODEC,
@@ -51,6 +58,10 @@ public class ModMessages {
         event.register(
                 RequestTradeS2CPacket.TYPE,
                 RequestTradeS2CPacketHandler::handle
+        );
+        event.register(
+                TradeRequestHandleS2CPacket.TYPE,
+                TradeRequestHandleS2CPacketHandler::handle
         );
     }
 }

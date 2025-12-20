@@ -21,7 +21,7 @@ public class TradeRequestToast implements Toast {
 
     private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "message");
 
-    private static final long SHOW_TIME_MS = 3000L;
+    private static final long SHOW_TIME_MS = 20000L;
 
     private long firstShown = -1L;
     private Visibility visibility = Visibility.SHOW;
@@ -33,6 +33,13 @@ public class TradeRequestToast implements Toast {
         this.name = name;
         Minecraft.getInstance().getSkinManager().get(new GameProfile(sender, ""))
                 .thenAccept(skin -> skin.ifPresent(playerSkin -> senderSkin = playerSkin));
+    }
+
+    public static final Object TOKEN = new Object();
+
+    @Override
+    public Object getToken() {
+        return TOKEN;
     }
 
     @Override
@@ -75,5 +82,9 @@ public class TradeRequestToast implements Toast {
         for (int j = 0; j < lines.size() && j < 3; j++) {
             graphics.drawString(font, lines.get(j), 32, 11 + j * lineHeight,0xFF000000, false);
         }
+    }
+
+    public void hide() {
+        visibility = Visibility.HIDE;
     }
 }

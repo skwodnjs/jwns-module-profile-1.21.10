@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.networking.packet.RequestTradeS2CPacket;
+import net.jwn.jwnsprofilemod.networking.packet.TradeRequestHandleS2CPacket;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +19,7 @@ public class ModCommands {
     public static void onRegisterCommandsEvent(RegisterCommandsEvent event) {
         new TestCommand(event.getDispatcher());
         new OpenProfileCommand(event.getDispatcher());
+        new TradeRequestHandleCommand(event.getDispatcher());
     }
 
     private static class TestCommand {
