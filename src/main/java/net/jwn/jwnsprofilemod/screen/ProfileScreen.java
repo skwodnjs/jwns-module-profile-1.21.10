@@ -2,6 +2,8 @@ package net.jwn.jwnsprofilemod.screen;
 
 import com.mojang.authlib.GameProfile;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
+import net.jwn.jwnsprofilemod.networking.packet.EditAboutMeC2SPacket;
+import net.jwn.jwnsprofilemod.networking.packet.OpenTradeMenuC2SPacket;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
 import net.jwn.jwnsprofilemod.util.Functions;
 import net.minecraft.client.Minecraft;
@@ -16,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerSkin;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -73,8 +76,11 @@ public class ProfileScreen extends Screen {
 //                            onClose();
 //                        } else {
 //                            Minecraft.getInstance().setScreen(new TradeScreen(profile));
+                        OpenTradeMenuC2SPacket packet = new OpenTradeMenuC2SPacket();
+                        ClientPacketDistributor.sendToServer(packet);
 //                        }
-                        Minecraft.getInstance().setScreen(new TradeScreen(profile));
+//                        Minecraft.getInstance().setScreen(new TradeScreen(profile));
+                        onClose();
                     }
                 },
                 // 귓속말
