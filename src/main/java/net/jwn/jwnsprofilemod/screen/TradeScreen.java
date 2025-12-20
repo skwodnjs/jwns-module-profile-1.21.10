@@ -46,8 +46,9 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
         topPos = y;
 
         addRenderableWidget(new ImageButton(
-                x + 20, y + 44, 7, 7,
+                x + 20 + 159 * menu.getPosition(), y + 44, 7, 7,
                 new WidgetSprites(CHECK_BUTTON, CHECK_BUTTON_DISABLED, CHECK_BUTTON_HIGHLIGHTED), button -> {
+                    // packet to server (with position, A or B)
                     button.active = false;
                 }
         ));
@@ -89,10 +90,14 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
             );
         }
 
-        if (menu.isPlayerBJoined.get() == 1) {
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECK_BUTTON_DISABLED, x + 179, y + 44, 7, 7);
+        boolean ready =
+            menu.getPosition() == 0 ? menu.isPlayerAReady.get() == 1 :
+            menu.getPosition() == 1 && menu.isPlayerBReady.get() == 1;
+
+        if (ready) {
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECK_BUTTON_DISABLED, x + 20 + 159 * (1 - menu.getPosition()), y + 44, 7, 7);
         } else {
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECK_BUTTON, x + 179, y + 44, 7, 7);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECK_BUTTON, x + 20 + 159 * (1 - menu.getPosition()), y + 44, 7, 7);
         }
     }
 
@@ -110,5 +115,7 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
         super.onClose();
         TradeCanceledC2SPacket packet = new TradeCanceledC2SPacket();
         ClientPacketDistributor.sendToServer(packet);
+
+
     }
 }

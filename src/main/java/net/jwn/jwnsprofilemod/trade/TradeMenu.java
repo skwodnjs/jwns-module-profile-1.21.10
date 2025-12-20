@@ -12,6 +12,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class TradeMenu extends AbstractContainerMenu {
@@ -19,66 +20,103 @@ public class TradeMenu extends AbstractContainerMenu {
     public UUID playerAUUID;
     public UUID playerBUUID;
     public final DataSlot isPlayerBJoined = DataSlot.standalone();
+    public final DataSlot isPlayerAReady = DataSlot.standalone();
+    public final DataSlot isPlayerBReady = DataSlot.standalone();
+
+    private int position = -1;
 
     public TradeMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(containerId, inv);
-        this.playerAUUID = extraData.readUUID();
-        this.playerBUUID = extraData.readUUID();
+        this(containerId, inv, (TradeSession) null, extraData.readUUID(), extraData.readUUID());
     }
 
     private final MinecraftServer server;
-    private final Player player;
 
-    private TradeMenu(int containerId, Inventory inv) {
-        super(ModMenuTypes.TRADE_MENU.get(), containerId);
-        this.session = null;
-        this.player = inv.player;
-        this.server = player.level().getServer();
-
-        addPlayerInventory(inv);
-        addPlayerHotbar(inv);
-
-        Container aDummy = new SimpleContainer(9);
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                this.addSlot(new Slot(aDummy, row * 3 + col, 38 + col * 18, 22 + row * 18));
-            }
-        }
-
-        ContainerData data = new SimpleContainerData(9);
-        addDataSlots(data);
-        addDataSlot(isPlayerBJoined);
-    }
-
-    public TradeMenu(int containerId, Inventory inv, TradeSession session) {
+    public TradeMenu(int containerId, Inventory inv, TradeSession session, UUID playerAUUID, UUID playerBUUID) {
         super(ModMenuTypes.TRADE_MENU.get(), containerId);
         this.session = session;
-        this.player = inv.player;
-        this.server = player.level().getServer();
+        this.server = inv.player.level().getServer();
+
+        this.playerAUUID = playerAUUID;
+        this.playerBUUID = playerBUUID;
+
+        if (Objects.equals(this.playerAUUID, inv.player.getUUID())) this.position = 0;
+        else if (Objects.equals(this.playerBUUID, inv.player.getUUID())) this.position = 1;
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
-        Container a = session.offerA();
+        Container a = session != null ? session.offerA() : new SimpleContainer(9);
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
-                this.addSlot(new Slot(a, row * 3 + col, 38 + col * 18, 22 + row * 18));
+                if (this.position == -1 || this.position == 1) {
+                    this.addSlot(new Slot(a, row * 3 + col, 38 + col * 18, 22 + row * 18) {
+                        @Override
+                        public boolean mayPickup(Player player) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean mayPlace(ItemStack stack) {
+                            return false;
+                        }
+                    });
+                } else {
+                    this.addSlot(new Slot(a, row * 3 + col, 38 + col * 18, 22 + row * 18));
+                }
             }
         }
 
-        ContainerData data = new SimpleContainerData(9);
+        Container b = session != null ? session.offerB() : new SimpleContainer(9);
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (this.position == -1 || this.position == 0) {
+                    this.addSlot(new Slot(b, row * 3 + col, 116 + col * 18, 22 + row * 18) {
+                        @Override
+                        public boolean mayPickup(Player player) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean mayPlace(ItemStack stack) {
+                            return false;
+                        }
+                    });
+                } else {
+                    this.addSlot(new Slot(b, row * 3 + col, 116 + col * 18, 22 + row * 18));
+                }
+            }
+        }
+
+        ContainerData data = new SimpleContainerData(18);
         addDataSlots(data);
+
         addDataSlot(isPlayerBJoined);
+        addDataSlot(isPlayerAReady);
+        addDataSlot(isPlayerBReady);
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     @Override
     public void broadcastChanges() {
         if (session != null) {
-            session.tick();
             int s = session.isPlayerBJoined() ? 1 : 0;
             if (isPlayerBJoined.get() != s) {
                 isPlayerBJoined.set(s);
             }
+
+            int a = session.playerAReady() ? 1 : 0;
+            if (isPlayerAReady.get() != a) {
+                isPlayerAReady.set(a);
+            }
+            int b = session.playerBReady() ? 1 : 0;
+            if (isPlayerBReady.get() != b) {
+                isPlayerBReady.set(b);
+            }
+
+            session.tick();
             if (session.life() == 0) {
                 TradeSessionManager.sessionClose(session, server);
                 ServerPlayer target = server.getPlayerList().getPlayer(session.playerB());
@@ -99,7 +137,7 @@ public class TradeMenu extends AbstractContainerMenu {
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
-    private static final int TE_INVENTORY_SLOT_COUNT = 9;
+    private static final int TE_INVENTORY_SLOT_COUNT = 18;
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {

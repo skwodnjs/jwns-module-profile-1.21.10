@@ -19,6 +19,8 @@ public class TradeSession implements MenuProvider {
     private Boolean isPlayerBJoined = false;
     private final Container offerA = new SimpleContainer(9);
     private final Container offerB = new SimpleContainer(9);
+    private Boolean playerAReady = false;
+    private Boolean playerBReady = false;
 
     public TradeSession(UUID playerA, UUID playerB) {
         this.id = UUID.randomUUID();
@@ -32,7 +34,11 @@ public class TradeSession implements MenuProvider {
     public Boolean isPlayerBJoined() { return isPlayerBJoined; }
     public Container offerA() { return offerA; }
     public Container offerB() { return offerB; }
+    public boolean playerAReady() { return playerAReady; }
+    public boolean playerBReady() { return playerBReady; }
 
+    public void playerAisReady() { playerAReady = true; }
+    public void playerBisReady() { playerBReady = true; }
     public void playerBIsJoined() {
         isPlayerBJoined = true;
     }
@@ -40,7 +46,6 @@ public class TradeSession implements MenuProvider {
     private int life = 20 * 20;
 
     public void tick() {
-        System.out.println(life);
         if (!(isPlayerBJoined)) life -= 1;
     }
 
@@ -58,6 +63,6 @@ public class TradeSession implements MenuProvider {
         UUID u = player.getUUID();
         if (!u.equals(playerA) && !u.equals(playerB)) return null;
 
-        return new TradeMenu(containerId, inventory, this);
+        return new TradeMenu(containerId, inventory, this, playerA, playerB);
     }
 }
