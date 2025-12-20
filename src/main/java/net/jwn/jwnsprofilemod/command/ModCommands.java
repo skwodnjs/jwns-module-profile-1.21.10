@@ -3,15 +3,13 @@ package net.jwn.jwnsprofilemod.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
-import net.jwn.jwnsprofilemod.networking.packet.RequestTradeS2CPacket;
-import net.jwn.jwnsprofilemod.networking.packet.TradeRequestHandleS2CPacket;
+import net.jwn.jwnsprofilemod.trade.TradeSessionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = JWNsProfileMod.MOD_ID)
 public class ModCommands {
@@ -27,11 +25,9 @@ public class ModCommands {
             dispatcher.register(Commands.literal("test").executes(this::execute));
         }
         private int execute(CommandContext<CommandSourceStack> context) {
-            if (context.getSource().getPlayer() != null) {
-                Player player = context.getSource().getPlayer();
-                RequestTradeS2CPacket packet = new RequestTradeS2CPacket(player.getUUID(), player.getPlainTextName());
-                PacketDistributor.sendToPlayer(context.getSource().getPlayer(), packet);
-            }
+            TradeSessionManager.tradingPlayer.forEach(
+                    (uuid, uuid2) -> context.getSource().getPlayer().sendSystemMessage(Component.literal(String.valueOf(uuid)))
+            );
             return 1;
         }
     }

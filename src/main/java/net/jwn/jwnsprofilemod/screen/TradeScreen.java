@@ -2,6 +2,7 @@ package net.jwn.jwnsprofilemod.screen;
 
 import com.mojang.authlib.GameProfile;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
+import net.jwn.jwnsprofilemod.networking.packet.TradeCanceledC2SPacket;
 import net.jwn.jwnsprofilemod.trade.TradeMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.PlayerSkin;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
     private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "textures/gui/trade_gui.png");
@@ -21,7 +23,7 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
     private static final ResourceLocation CHECK_BUTTON_DISABLED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "check_button_disabled");
 
     public TradeScreen(TradeMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, Component.translatable("jwnsprofilemod.trade.title"));
+        super(menu, inventory, title);
     }
 
     private static final int IMAGE_WIDTH = 256;
@@ -50,7 +52,6 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
                 }
         ));
 
-
         Minecraft.getInstance().getSkinManager().get(new GameProfile(this.menu.playerAUUID, ""))
                 .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin1 = playerSkin));
         Minecraft.getInstance().getSkinManager().get(new GameProfile(this.menu.playerBUUID, ""))
@@ -75,7 +76,7 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
                     8, 8, 64, 64
             );
         }
-        if (cachedSkin2 != null) {
+        if (cachedSkin2 != null && menu.isPlayerBJoined.get() == 1) {
             graphics.blit(
                     RenderPipelines.GUI_TEXTURED, cachedSkin2.body().texturePath(), x + 179, y + 22,
                     8.0F, 8.0F, 16, 16,
@@ -88,7 +89,11 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
             );
         }
 
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECK_BUTTON_DISABLED, x + 179, y + 44, 7, 7);
+        if (menu.isPlayerBJoined.get() == 1) {
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECK_BUTTON_DISABLED, x + 179, y + 44, 7, 7);
+        } else {
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECK_BUTTON, x + 179, y + 44, 7, 7);
+        }
     }
 
     @Override
@@ -98,5 +103,12 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
                 0.0F, 0.0F, DRAW_WIDTH, DRAW_HEIGHT,
                 DRAW_WIDTH, DRAW_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT
         );
+    }
+
+    @Override
+    public void onClose() {
+        super.onClose();
+        TradeCanceledC2SPacket packet = new TradeCanceledC2SPacket();
+        ClientPacketDistributor.sendToServer(packet);
     }
 }

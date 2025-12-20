@@ -1,9 +1,9 @@
 package net.jwn.jwnsprofilemod.networking;
 
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
+import net.jwn.jwnsprofilemod.networking.client.CloseTradeToastS2CPacketHandler;
 import net.jwn.jwnsprofilemod.networking.client.OpenProfileScreenS2CPacketHandler;
 import net.jwn.jwnsprofilemod.networking.client.RequestTradeS2CPacketHandler;
-import net.jwn.jwnsprofilemod.networking.client.TradeRequestHandleS2CPacketHandler;
 import net.jwn.jwnsprofilemod.networking.packet.*;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -27,9 +27,9 @@ public class ModMessages {
                 RequestTradeS2CPacket::handle
         );
         registrar.playBidirectional(
-                TradeRequestHandleS2CPacket.TYPE,
-                TradeRequestHandleS2CPacket.STREAM_CODEC,
-                TradeRequestHandleS2CPacket::handle
+                CloseTradeToastS2CPacket.TYPE,
+                CloseTradeToastS2CPacket.STREAM_CODEC,
+                CloseTradeToastS2CPacket::handle
         );
 
         registrar.playToServer(
@@ -47,6 +47,16 @@ public class ModMessages {
                 CreateTradeMenuC2SPacket.STREAM_CODEC,
                 CreateTradeMenuC2SPacket::handle
         );
+        registrar.playToServer(
+                RequestTradeC2SPacket.TYPE,
+                RequestTradeC2SPacket.STREAM_CODEC,
+                RequestTradeC2SPacket::handle
+        );
+        registrar.playToServer(
+                TradeCanceledC2SPacket.TYPE,
+                TradeCanceledC2SPacket.STREAM_CODEC,
+                TradeCanceledC2SPacket::handle
+        );
     }
 
     @SubscribeEvent
@@ -60,8 +70,8 @@ public class ModMessages {
                 RequestTradeS2CPacketHandler::handle
         );
         event.register(
-                TradeRequestHandleS2CPacket.TYPE,
-                TradeRequestHandleS2CPacketHandler::handle
+                CloseTradeToastS2CPacket.TYPE,
+                CloseTradeToastS2CPacketHandler::handle
         );
     }
 }

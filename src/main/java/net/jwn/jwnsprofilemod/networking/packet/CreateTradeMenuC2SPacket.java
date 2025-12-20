@@ -30,12 +30,10 @@ public record CreateTradeMenuC2SPacket(UUID playerB) implements CustomPacketPayl
     public static void handle(final CreateTradeMenuC2SPacket data, final IPayloadContext context) {
         context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer player) {
-                if (TradeSessionManager.tradingPlayerUUID.contains(data.playerB())) {
-                    player.displayClientMessage(
-                            Component.translatable("jwnsprofilemod.profile.already_trading"), false);
+                if (TradeSessionManager.tradingPlayer.containsKey(data.playerB())) {
+                    player.displayClientMessage(Component.translatable("jwnsprofilemod.profile.already_trading"), false);
                 } else {
-                    TradeSessionManager.tradingPlayerUUID.add(context.player().getUUID());
-                    TradeSession session = TradeSessionManager.create(player.level(), player.getUUID(), data.playerB());
+                    TradeSession session = TradeSessionManager.create(player.getUUID(), data.playerB());
                     player.openMenu(session, buf -> {
                         buf.writeUUID(session.playerA());
                         buf.writeUUID(session.playerB());

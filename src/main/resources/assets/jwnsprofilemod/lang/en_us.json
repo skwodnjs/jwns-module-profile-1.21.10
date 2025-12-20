@@ -11,8 +11,12 @@
   "jwnsprofilemod.profile_edit.save": "save",
   "jwnsprofilemod.profile_edit.exit": "exit",
   "jwnsprofilemod.guestbook.title": "%s's guestbook",
-  "jwnsprofilemod.profile.offline_message": "The player is currently offline.",
+  "jwnsprofilemod.profile.offline_message": "The player is now offline.",
   "jwnsprofilemod.profile.cannot_trade_yourself": "You cannot trade with yourself.",
   "jwnsprofilemod.profile.already_trading": "This player is already in a trade.",
-  "jwnsprofilemod.trade.title": "Trade"
+  "jwnsprofilemod.trade.title": "Trade",
+  "jwnsprofilemod.profile.trade_reject": "The other player has declined the trade.",
+  "jwnsprofilemod.profile.cannot_while_trading": "You cannot do this while trading.",
+  "jwnsprofilemod.profile.other_player_already_trading": "The other player is already in another trade."
+
 }

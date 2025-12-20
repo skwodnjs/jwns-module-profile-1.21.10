@@ -14,28 +14,38 @@ import java.util.UUID;
 
 public class TradeSession implements MenuProvider {
     private final UUID id;
-    private final ServerLevel level;
     private final UUID playerA;
     private final UUID playerB;
     private Boolean isPlayerBJoined = false;
     private final Container offerA = new SimpleContainer(9);
+    private final Container offerB = new SimpleContainer(9);
 
-    public TradeSession(ServerLevel level, UUID playerA, UUID playerB) {
+    public TradeSession(UUID playerA, UUID playerB) {
         this.id = UUID.randomUUID();
-        this.level = level;
         this.playerA = playerA;
         this.playerB = playerB;
     }
 
     public UUID id() { return id; }
-    public ServerLevel level() { return level; }
     public UUID playerA() { return playerA; }
     public UUID playerB() { return playerB; }
     public Boolean isPlayerBJoined() { return isPlayerBJoined; }
     public Container offerA() { return offerA; }
+    public Container offerB() { return offerB; }
 
     public void playerBIsJoined() {
         isPlayerBJoined = true;
+    }
+
+    private int life = 20 * 20;
+
+    public void tick() {
+        System.out.println(life);
+        if (!(isPlayerBJoined)) life -= 1;
+    }
+
+    public int life() {
+        return this.life;
     }
 
     @Override
@@ -44,10 +54,10 @@ public class TradeSession implements MenuProvider {
     }
 
     @Override
-    public AbstractContainerMenu createMenu(int containerId, Inventory inv, Player player) {
+    public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
         UUID u = player.getUUID();
         if (!u.equals(playerA) && !u.equals(playerB)) return null;
 
-        return new TradeMenu(containerId, inv, this);
+        return new TradeMenu(containerId, inventory, this);
     }
 }

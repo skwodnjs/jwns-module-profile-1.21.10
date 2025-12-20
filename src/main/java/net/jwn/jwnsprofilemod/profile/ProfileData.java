@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +30,7 @@ public class ProfileData extends SavedData {
     public static class PlayerProfile {
 
         private final String name;
-        private final UUID uuid;
+        private final UUID playerUUID;
         private int level;
         private Long lastLogoutAt;
         private String aboutMe;
@@ -40,7 +39,7 @@ public class ProfileData extends SavedData {
         public static final Codec<PlayerProfile> CODEC =
                 RecordCodecBuilder.create(instance -> instance.group(
                         Codec.STRING.fieldOf("name").forGetter(PlayerProfile::getName),
-                        UUIDUtil.CODEC.fieldOf("uuid").forGetter(PlayerProfile::getUuid),
+                        UUIDUtil.CODEC.fieldOf("uuid").forGetter(PlayerProfile::getUUID),
                         Codec.INT.fieldOf("level").forGetter(PlayerProfile::getLevel),
                         Codec.LONG.fieldOf("last_logout_at").forGetter(PlayerProfile::getLastLogoutAt),
                         Codec.STRING.fieldOf("about_me").forGetter(PlayerProfile::getAboutMe),
@@ -50,7 +49,7 @@ public class ProfileData extends SavedData {
         public static final StreamCodec<ByteBuf, PlayerProfile> STREAM_CODEC =
                 StreamCodec.composite(
                         ByteBufCodecs.STRING_UTF8, PlayerProfile::getName,
-                        UUIDUtil.STREAM_CODEC, PlayerProfile::getUuid,
+                        UUIDUtil.STREAM_CODEC, PlayerProfile::getUUID,
                         ByteBufCodecs.VAR_INT, PlayerProfile::getLevel,
                         ByteBufCodecs.VAR_LONG, PlayerProfile::getLastLogoutAt,
                         ByteBufCodecs.STRING_UTF8, PlayerProfile::getAboutMe,
@@ -58,17 +57,17 @@ public class ProfileData extends SavedData {
                         PlayerProfile::new
                 );
 
-        public PlayerProfile(String name, UUID uuid, int level, Long lastLogoutAt, String aboutMe, List<GuestbookEntry> guestbook) {
+        public PlayerProfile(String name, UUID playerUUID, int level, Long lastLogoutAt, String aboutMe, List<GuestbookEntry> guestbook) {
             this.name = name;
-            this.uuid = uuid;
+            this.playerUUID = playerUUID;
             this.level = level;
             this.lastLogoutAt = lastLogoutAt;
             this.aboutMe = aboutMe;
             this.guestbook = guestbook;
         }
 
-        public PlayerProfile(String name, UUID uuid) {
-            this(name, uuid, 0, 0L, "", List.of());
+        public PlayerProfile(String name, UUID playerUUID) {
+            this(name, playerUUID, 0, 0L, "", List.of());
         }
 
         public PlayerProfile(GameProfile profile) {
@@ -81,8 +80,8 @@ public class ProfileData extends SavedData {
             return name;
         }
 
-        public UUID getUuid() {
-            return uuid;
+        public UUID getUUID() {
+            return playerUUID;
         }
 
         public int getLevel() {

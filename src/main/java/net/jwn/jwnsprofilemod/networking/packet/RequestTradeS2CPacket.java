@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public record RequestTradeS2CPacket(UUID sender, String name) implements CustomPacketPayload{
     public static final CustomPacketPayload.Type<RequestTradeS2CPacket> TYPE =
-            new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "requset_trade_packet"));
+            new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "reqest_trade_s_to_c_packet"));
 
     public static final StreamCodec<ByteBuf, RequestTradeS2CPacket> STREAM_CODEC = StreamCodec.composite(
             UUIDUtil.STREAM_CODEC, RequestTradeS2CPacket::sender,
