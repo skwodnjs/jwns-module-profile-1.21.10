@@ -2,8 +2,7 @@ package net.jwn.jwnsprofilemod.screen;
 
 import com.mojang.authlib.GameProfile;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
-import net.jwn.jwnsprofilemod.networking.packet.EditAboutMeC2SPacket;
-import net.jwn.jwnsprofilemod.networking.packet.OpenTradeMenuC2SPacket;
+import net.jwn.jwnsprofilemod.networking.packet.CreateTradeMenuC2SPacket;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
 import net.jwn.jwnsprofilemod.util.Functions;
 import net.minecraft.client.Minecraft;
@@ -64,24 +63,22 @@ public class ProfileScreen extends Screen {
                 () -> Minecraft.getInstance().setScreen(new GuestbookScreen(profile)),
                 // 교환 요청
                 () -> {
-                    if (!isOnline && Minecraft.getInstance().player != null) {
-                        Minecraft.getInstance().player.displayClientMessage(
-                                Component.translatable("jwnsprofilemod.profile.offline_message"), false);
-                        onClose();
-                    } else {
+//                    if (!isOnline && Minecraft.getInstance().player != null) {
+//                        Minecraft.getInstance().player.displayClientMessage(
+//                                Component.translatable("jwnsprofilemod.profile.offline_message"), false);
+//                        onClose();
+//                    } else {
 //                        assert Minecraft.getInstance().player != null;
 //                        if (Objects.equals(Minecraft.getInstance().player.getUUID(), profile.getUuid())) {
 //                            Minecraft.getInstance().player.displayClientMessage(
 //                                    Component.translatable("jwnsprofilemod.profile.cannot_trade_yourself"), false);
 //                            onClose();
 //                        } else {
-//                            Minecraft.getInstance().setScreen(new TradeScreen(profile));
-                        OpenTradeMenuC2SPacket packet = new OpenTradeMenuC2SPacket();
-                        ClientPacketDistributor.sendToServer(packet);
+                            CreateTradeMenuC2SPacket packet = new CreateTradeMenuC2SPacket(profile.getUuid());
+                            ClientPacketDistributor.sendToServer(packet);
+                            onClose();
 //                        }
-//                        Minecraft.getInstance().setScreen(new TradeScreen(profile));
-                        onClose();
-                    }
+//                    }
                 },
                 // 귓속말
                 () -> {

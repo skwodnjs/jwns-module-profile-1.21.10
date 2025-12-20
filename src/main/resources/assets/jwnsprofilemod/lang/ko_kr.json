@@ -13,5 +13,6 @@
   "jwnsprofilemod.guestbook.title": "%s의 방명록",
   "jwnsprofilemod.profile.offline_message": "플레이어가 현재 접속중이 아닙니다.",
   "jwnsprofilemod.profile.cannot_trade_yourself": "본인과는 거래할 수 없습니다.",
+  "jwnsprofilemod.profile.already_trading": "이미 거래 중인 플레이어입니다.",
   "jwnsprofilemod.trade.title": "교환하기"
 }

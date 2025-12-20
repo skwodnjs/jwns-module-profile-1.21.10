@@ -1,6 +1,7 @@
 package net.jwn.jwnsprofilemod;
 
 import com.mojang.logging.LogUtils;
+import net.jwn.jwnsprofilemod.trade.ModMenuTypes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -26,7 +27,7 @@ public class JWNsProfileMod {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-
+        ModMenuTypes.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.

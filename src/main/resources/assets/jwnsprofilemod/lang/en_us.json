@@ -13,5 +13,6 @@
   "jwnsprofilemod.guestbook.title": "%s's guestbook",
   "jwnsprofilemod.profile.offline_message": "The player is currently offline.",
   "jwnsprofilemod.profile.cannot_trade_yourself": "You cannot trade with yourself.",
+  "jwnsprofilemod.profile.already_trading": "This player is already in a trade.",
   "jwnsprofilemod.trade.title": "Trade"
 }

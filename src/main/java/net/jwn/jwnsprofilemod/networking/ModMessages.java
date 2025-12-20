@@ -5,7 +5,7 @@ import net.jwn.jwnsprofilemod.networking.client.OpenProfileScreenS2CPacketHandle
 import net.jwn.jwnsprofilemod.networking.packet.AddGuestbookMessageC2SPacket;
 import net.jwn.jwnsprofilemod.networking.packet.EditAboutMeC2SPacket;
 import net.jwn.jwnsprofilemod.networking.packet.OpenProfileScreenS2CPacket;
-import net.jwn.jwnsprofilemod.networking.packet.OpenTradeMenuC2SPacket;
+import net.jwn.jwnsprofilemod.networking.packet.CreateTradeMenuC2SPacket;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
@@ -33,9 +33,9 @@ public class ModMessages {
                 AddGuestbookMessageC2SPacket::handle
         );
         registrar.playToServer(
-                OpenTradeMenuC2SPacket.TYPE,
-                OpenTradeMenuC2SPacket.STREAM_CODEC,
-                OpenTradeMenuC2SPacket::handle
+                CreateTradeMenuC2SPacket.TYPE,
+                CreateTradeMenuC2SPacket.STREAM_CODEC,
+                CreateTradeMenuC2SPacket::handle
         );
     }
 
