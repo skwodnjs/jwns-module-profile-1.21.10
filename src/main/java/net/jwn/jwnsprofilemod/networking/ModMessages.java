@@ -2,10 +2,8 @@ package net.jwn.jwnsprofilemod.networking;
 
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.networking.client.OpenProfileScreenS2CPacketHandler;
-import net.jwn.jwnsprofilemod.networking.packet.AddGuestbookMessageC2SPacket;
-import net.jwn.jwnsprofilemod.networking.packet.EditAboutMeC2SPacket;
-import net.jwn.jwnsprofilemod.networking.packet.OpenProfileScreenS2CPacket;
-import net.jwn.jwnsprofilemod.networking.packet.CreateTradeMenuC2SPacket;
+import net.jwn.jwnsprofilemod.networking.client.RequestTradeS2CPacketHandler;
+import net.jwn.jwnsprofilemod.networking.packet.*;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
@@ -21,6 +19,11 @@ public class ModMessages {
                 OpenProfileScreenS2CPacket.TYPE,
                 OpenProfileScreenS2CPacket.STREAM_CODEC,
                 OpenProfileScreenS2CPacket::handle
+        );
+        registrar.playBidirectional(
+                RequestTradeS2CPacket.TYPE,
+                RequestTradeS2CPacket.STREAM_CODEC,
+                RequestTradeS2CPacket::handle
         );
         registrar.playToServer(
                 EditAboutMeC2SPacket.TYPE,
@@ -44,6 +47,10 @@ public class ModMessages {
         event.register(
                 OpenProfileScreenS2CPacket.TYPE,
                 OpenProfileScreenS2CPacketHandler::handle
+        );
+        event.register(
+                RequestTradeS2CPacket.TYPE,
+                RequestTradeS2CPacketHandler::handle
         );
     }
 }

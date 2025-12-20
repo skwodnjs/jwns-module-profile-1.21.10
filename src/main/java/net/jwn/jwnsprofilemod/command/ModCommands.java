@@ -3,11 +3,13 @@ package net.jwn.jwnsprofilemod.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
+import net.jwn.jwnsprofilemod.networking.packet.RequestTradeS2CPacket;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = JWNsProfileMod.MOD_ID)
 public class ModCommands {
@@ -22,9 +24,10 @@ public class ModCommands {
             dispatcher.register(Commands.literal("test").executes(this::execute));
         }
         private int execute(CommandContext<CommandSourceStack> context) {
-
-
-
+            if (context.getSource().getPlayer() != null) {
+                RequestTradeS2CPacket packet = new RequestTradeS2CPacket(context.getSource().getPlayer().getUUID());
+                PacketDistributor.sendToPlayer(context.getSource().getPlayer(), packet);
+            }
             return 1;
         }
     }
