@@ -1,7 +1,6 @@
 package net.jwn.jwnsprofilemod.trade;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;

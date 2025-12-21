@@ -61,7 +61,17 @@ public class TradeMenu extends AbstractContainerMenu {
                         }
                     });
                 } else {
-                    this.addSlot(new Slot(a, row * 3 + col, 38 + col * 18, 22 + row * 18));
+                    this.addSlot(new Slot(a, row * 3 + col, 38 + col * 18, 22 + row * 18) {
+                        @Override
+                        public boolean mayPickup(Player player) {
+                            return isPlayerAReady.get() == 0;
+                        }
+
+                        @Override
+                        public boolean mayPlace(ItemStack stack) {
+                            return isPlayerAReady.get() == 0;
+                        }
+                    });
                 }
             }
         }
@@ -82,7 +92,17 @@ public class TradeMenu extends AbstractContainerMenu {
                         }
                     });
                 } else {
-                    this.addSlot(new Slot(b, row * 3 + col, 116 + col * 18, 22 + row * 18));
+                    this.addSlot(new Slot(b, row * 3 + col, 116 + col * 18, 22 + row * 18) {
+                        @Override
+                        public boolean mayPickup(Player player) {
+                            return isPlayerBReady.get() == 0;
+                        }
+
+                        @Override
+                        public boolean mayPlace(ItemStack stack) {
+                            return isPlayerBReady.get() == 0;
+                        }
+                    });
                 }
             }
         }
@@ -124,6 +144,9 @@ public class TradeMenu extends AbstractContainerMenu {
                     CloseTradeToastS2CPacket packet = new CloseTradeToastS2CPacket(true);
                     PacketDistributor.sendToPlayer(target, packet);
                 }
+            }
+            if (session.playerAReady() && session.playerBReady()) {
+                TradeSessionManager.sessionSuccessed(session, server);
             }
         }
         super.broadcastChanges();

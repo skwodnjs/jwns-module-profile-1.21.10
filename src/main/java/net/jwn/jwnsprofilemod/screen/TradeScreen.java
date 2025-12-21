@@ -3,6 +3,7 @@ package net.jwn.jwnsprofilemod.screen;
 import com.mojang.authlib.GameProfile;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
 import net.jwn.jwnsprofilemod.networking.packet.TradeCanceledC2SPacket;
+import net.jwn.jwnsprofilemod.networking.packet.TradeReadyC2SPacket;
 import net.jwn.jwnsprofilemod.trade.TradeMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -48,8 +49,11 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
         addRenderableWidget(new ImageButton(
                 x + 20 + 159 * menu.getPosition(), y + 44, 7, 7,
                 new WidgetSprites(CHECK_BUTTON, CHECK_BUTTON_DISABLED, CHECK_BUTTON_HIGHLIGHTED), button -> {
-                    // packet to server (with position, A or B)
-                    button.active = false;
+                    if (Minecraft.getInstance().player != null) {
+                        TradeReadyC2SPacket packet = new TradeReadyC2SPacket(Minecraft.getInstance().player.getUUID());
+                        ClientPacketDistributor.sendToServer(packet);
+                        button.active = false;
+                    }
                 }
         ));
 
@@ -90,11 +94,11 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
             );
         }
 
-        boolean ready =
-            menu.getPosition() == 0 ? menu.isPlayerAReady.get() == 1 :
-            menu.getPosition() == 1 && menu.isPlayerBReady.get() == 1;
+        boolean theOtherPlayerIsReady =
+            menu.getPosition() == 0 ? menu.isPlayerBReady.get() == 1 :
+            menu.getPosition() == 1 && menu.isPlayerAReady.get() == 1;
 
-        if (ready) {
+        if (theOtherPlayerIsReady) {
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECK_BUTTON_DISABLED, x + 20 + 159 * (1 - menu.getPosition()), y + 44, 7, 7);
         } else {
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CHECK_BUTTON, x + 20 + 159 * (1 - menu.getPosition()), y + 44, 7, 7);
@@ -115,7 +119,5 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
         super.onClose();
         TradeCanceledC2SPacket packet = new TradeCanceledC2SPacket();
         ClientPacketDistributor.sendToServer(packet);
-
-
     }
 }

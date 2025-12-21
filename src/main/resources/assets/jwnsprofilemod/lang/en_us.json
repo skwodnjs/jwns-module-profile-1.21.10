@@ -16,6 +16,7 @@
   "jwnsprofilemod.profile.already_trading": "This player is already in a trade.",
   "jwnsprofilemod.trade.title": "Trade",
   "jwnsprofilemod.profile.trade_reject": "The other player has declined the trade.",
+  "jwnsprofilemod.profile.trade_success": "The trade is successed",
   "jwnsprofilemod.profile.cannot_while_trading": "You cannot do this while trading.",
   "jwnsprofilemod.profile.other_player_already_trading": "The other player is already in another trade."
 

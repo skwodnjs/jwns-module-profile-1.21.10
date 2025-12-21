@@ -58,6 +58,31 @@ public class TradeSessionManager {
         SESSIONS.remove(session.id());
     }
 
+    public static void sessionSuccessed(TradeSession session, MinecraftServer server) {
+        ServerPlayer playerA = server.getPlayerList().getPlayer(session.playerA());
+        if (playerA != null) {
+            tradingPlayer.remove(playerA.getUUID());
+            giveOfferToPlayer(playerA, session.offerB());
+        }
+        if (playerA != null && playerA.containerMenu instanceof TradeMenu) {
+            playerA.closeContainer();
+            playerA.displayClientMessage(Component.translatable("jwnsprofilemod.profile.trade_success"), false);
+        }
+
+        ServerPlayer playerB = server.getPlayerList().getPlayer(session.playerB());
+        if (playerB != null) {
+            tradingPlayer.remove(playerB.getUUID());
+            giveOfferToPlayer(playerB, session.offerA());
+        }
+        if (playerB != null && playerB.containerMenu instanceof TradeMenu) {
+            System.out.println(playerB.getPlainTextName());
+            playerB.closeContainer();
+            playerB.displayClientMessage(Component.translatable("jwnsprofilemod.profile.trade_success"), false);
+        }
+
+        SESSIONS.remove(session.id());
+    }
+
     private static void giveOfferToPlayer(ServerPlayer player, Container offer) {
         for (int i = 0; i < offer.getContainerSize(); i++) {
             ItemStack stack = offer.getItem(i);
