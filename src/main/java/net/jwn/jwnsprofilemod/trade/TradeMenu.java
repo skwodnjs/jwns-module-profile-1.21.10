@@ -64,7 +64,7 @@ public class TradeMenu extends AbstractContainerMenu {
                     this.addSlot(new Slot(a, row * 3 + col, 38 + col * 18, 22 + row * 18) {
                         @Override
                         public boolean mayPickup(Player player) {
-                            return isPlayerAReady.get() == 0;
+                            return false;
                         }
 
                         @Override
@@ -95,7 +95,7 @@ public class TradeMenu extends AbstractContainerMenu {
                     this.addSlot(new Slot(b, row * 3 + col, 116 + col * 18, 22 + row * 18) {
                         @Override
                         public boolean mayPickup(Player player) {
-                            return isPlayerBReady.get() == 0;
+                            return false;
                         }
 
                         @Override

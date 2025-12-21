@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,7 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
     private static final ResourceLocation CHECK_BUTTON = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "check_button");
     private static final ResourceLocation CHECK_BUTTON_HIGHLIGHTED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "check_button_highlighted");
     private static final ResourceLocation CHECK_BUTTON_DISABLED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "check_button_disabled");
+    private static final ResourceLocation ME = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "me");
 
     public TradeScreen(TradeMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -57,10 +59,30 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
                 }
         ));
 
-        Minecraft.getInstance().getSkinManager().get(new GameProfile(this.menu.playerAUUID, ""))
-                .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin1 = playerSkin));
-        Minecraft.getInstance().getSkinManager().get(new GameProfile(this.menu.playerBUUID, ""))
-                .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin2 = playerSkin));
+        if (Minecraft.getInstance().getConnection() != null) {
+            PlayerInfo info = Minecraft.getInstance().getConnection().getPlayerInfo(this.menu.playerAUUID);
+            if (info != null) {
+                GameProfile profile = info.getProfile();
+                Minecraft.getInstance().getSkinManager().get(profile)
+                        .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin1 = playerSkin));
+            }
+        } else {
+            Minecraft.getInstance().getSkinManager().get(new GameProfile(this.menu.playerAUUID, ""))
+                    .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin1 = playerSkin));
+        }
+
+        if (Minecraft.getInstance().getConnection() != null) {
+            PlayerInfo info = Minecraft.getInstance().getConnection().getPlayerInfo(this.menu.playerBUUID);
+            if (info != null) {
+                GameProfile profile = info.getProfile();
+                Minecraft.getInstance().getSkinManager().get(profile)
+                        .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin2 = playerSkin));
+            }
+        } else {
+            Minecraft.getInstance().getSkinManager().get(new GameProfile(this.menu.playerBUUID, ""))
+                    .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin2 = playerSkin));
+        }
+
     }
 
     @Override
@@ -93,6 +115,8 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
                     8, 8, 64, 64
             );
         }
+
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ME, x + 21 + 168 * menu.getPosition(), y + 35, 8, 5);
 
         boolean theOtherPlayerIsReady =
             menu.getPosition() == 0 ? menu.isPlayerBReady.get() == 1 :

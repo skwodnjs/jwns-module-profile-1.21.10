@@ -11,6 +11,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -103,8 +104,18 @@ public class ProfileScreen extends Screen {
                     button -> Minecraft.getInstance().setScreen(new ProfileEditScreen(profile))
             ));
         }
-        Minecraft.getInstance().getSkinManager().get(new GameProfile(profile.getUUID(), profile.getName()))
-                .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin = playerSkin));
+
+        if (Minecraft.getInstance().getConnection() != null) {
+            PlayerInfo info = Minecraft.getInstance().getConnection().getPlayerInfo(profile.getUUID());
+            if (info != null) {
+                GameProfile profile = info.getProfile();
+                Minecraft.getInstance().getSkinManager().get(profile)
+                        .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin = playerSkin));
+            }
+        } else {
+            Minecraft.getInstance().getSkinManager().get(new GameProfile(profile.getUUID(), profile.getName()))
+                    .thenAccept(skin -> skin.ifPresent(playerSkin -> cachedSkin = playerSkin));
+        }
     }
 
     @Override

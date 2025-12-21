@@ -8,6 +8,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastManager;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -31,8 +32,18 @@ public class TradeRequestToast implements Toast {
 
     public TradeRequestToast(UUID sender, String name){
         this.name = name;
-        Minecraft.getInstance().getSkinManager().get(new GameProfile(sender, ""))
-                .thenAccept(skin -> skin.ifPresent(playerSkin -> senderSkin = playerSkin));
+
+        if (Minecraft.getInstance().getConnection() != null) {
+            PlayerInfo info = Minecraft.getInstance().getConnection().getPlayerInfo(sender);
+            if (info != null) {
+                GameProfile profile = info.getProfile();
+                Minecraft.getInstance().getSkinManager().get(profile)
+                        .thenAccept(skin -> skin.ifPresent(playerSkin -> senderSkin = playerSkin));
+            }
+        } else {
+            Minecraft.getInstance().getSkinManager().get(new GameProfile(sender, ""))
+                    .thenAccept(skin -> skin.ifPresent(playerSkin -> senderSkin = playerSkin));
+        }
     }
 
     public static final Object TOKEN = new Object();
