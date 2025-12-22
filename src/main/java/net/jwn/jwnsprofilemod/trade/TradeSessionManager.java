@@ -16,7 +16,7 @@ public class TradeSessionManager {
 
     public static final Map<UUID, UUID> tradingPlayer = new ConcurrentHashMap<>();
 
-    private static final Map<UUID, TradeSession> SESSIONS = new ConcurrentHashMap<>();
+    public static final Map<UUID, TradeSession> SESSIONS = new ConcurrentHashMap<>();
 
     public static TradeSession create(UUID a, UUID b) {
         TradeSession s = new TradeSession(a, b);
@@ -49,14 +49,13 @@ public class TradeSessionManager {
             giveOfferToPlayer(playerB, session.offerB());
         }
         if (playerB != null && playerB.containerMenu instanceof TradeMenu) {
-            System.out.println(playerB.getPlainTextName());
             playerB.closeContainer();
         }
 
         SESSIONS.remove(session.id());
     }
 
-    public static void sessionSuccessed(TradeSession session, MinecraftServer server) {
+    public static void tradeSuccessed(TradeSession session, MinecraftServer server) {
         ServerPlayer playerA = server.getPlayerList().getPlayer(session.playerA());
         if (playerA != null) {
             tradingPlayer.remove(playerA.getUUID());

@@ -35,7 +35,7 @@ public class TradeRequestHandleCommand {
                     buf.writeUUID(session.playerA());
                     buf.writeUUID(session.playerB());
                 });
-                CloseTradeToastS2CPacket packet = new CloseTradeToastS2CPacket(false);
+                CloseTradeToastS2CPacket packet = new CloseTradeToastS2CPacket();
                 PacketDistributor.sendToPlayer(player, packet);
             } else {
                 player.displayClientMessage(Component.translatable("jwnsprofilemod.trade.cannot_accept"), false);

@@ -138,46 +138,24 @@ public class TradeMenu extends AbstractContainerMenu {
 
             session.tick();
             if (session.life() == 0) {
-                TradeSessionManager.sessionClose(session, server);
-                ServerPlayer target = server.getPlayerList().getPlayer(session.playerB());
-                if (target != null) {
-                    CloseTradeToastS2CPacket packet = new CloseTradeToastS2CPacket(true);
-                    PacketDistributor.sendToPlayer(target, packet);
-                }
+                ServerPlayer playerA = server.getPlayerList().getPlayer(session.playerA());
+                if (playerA != null) tradeCanceled(session, playerA);
             }
             if (session.isPlayerAReady() && session.isPlayerBReady()) {
-                TradeSessionManager.sessionSuccessed(session, server);
-            }
-
-            ServerPlayer playerA = server.getPlayerList().getPlayer(session.playerA());
-            ServerPlayer playerB = server.getPlayerList().getPlayer(session.playerB());
-
-            if (playerA != null && !(session.isPlayerAJoined()) && playerA.containerMenu instanceof TradeMenu) {
-                session.playerAIsJoined();
-            }
-            if (playerB != null && !(session.isPlayerBJoined()) && playerB.containerMenu instanceof TradeMenu) {
-                session.playerBIsJoined();
-            }
-
-            if (playerA != null && session.isPlayerAJoined() && !(playerA.containerMenu instanceof TradeMenu)) {
-                tradeCanceled(playerA);
-            }
-            if (playerB != null && session.isPlayerBJoined() && !(playerB.containerMenu instanceof TradeMenu)) {
-                tradeCanceled(playerB);
+                TradeSessionManager.tradeSuccessed(session, server);
             }
         }
         super.broadcastChanges();
     }
 
-    private void tradeCanceled(ServerPlayer player) {
-        TradeSession session = TradeSessionManager.get(player);
-        if (session != null) {
-            TradeSessionManager.sessionClose(session, player.level().getServer());
-            ServerPlayer target = player.level().getServer().getPlayerList().getPlayer(session.playerB());
-            if (target != null) {
-                CloseTradeToastS2CPacket packet = new CloseTradeToastS2CPacket(true);
-                PacketDistributor.sendToPlayer(target, packet);
-            }
+    private void tradeCanceled(TradeSession session, ServerPlayer player) {
+        TradeSessionManager.sessionClose(session, player.level().getServer());
+        ServerPlayer target = player.level().getServer().getPlayerList().getPlayer(
+                Objects.equals(player.getUUID(), session.playerA()) ? session.playerB() : session.playerA()
+        );
+        if (target != null) {
+            CloseTradeToastS2CPacket packet = new CloseTradeToastS2CPacket();
+            PacketDistributor.sendToPlayer(target, packet);
         }
     }
 
