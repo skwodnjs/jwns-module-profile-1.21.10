@@ -10,7 +10,10 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
+
+import java.util.Objects;
 
 public class TradeRequestHandleCommand {
     public TradeRequestHandleCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -34,8 +37,9 @@ public class TradeRequestHandleCommand {
                 });
                 CloseTradeToastS2CPacket packet = new CloseTradeToastS2CPacket(false);
                 PacketDistributor.sendToPlayer(player, packet);
+            } else {
+                player.displayClientMessage(Component.translatable("jwnsprofilemod.trade.cannot_accept"), false);
             }
-
         }
         return 1;
     }
@@ -44,9 +48,17 @@ public class TradeRequestHandleCommand {
         ServerPlayer player = context.getSource().getPlayer();
         if (player != null) {
             TradeSession session = TradeSessionManager.get(player);
-            TradeSessionManager.sessionClose(session , player.level().getServer());
-            String name = StringArgumentType.getString(context, "playerName");
-            player.displayClientMessage(Component.literal(name + "님의 거래 요청을 거절하셨습니다."), false);
+            if (session != null) {
+                TradeSessionManager.sessionClose(session, player.level().getServer());
+                Player target = player.level().getServer().getPlayerList().getPlayer(
+                        Objects.equals(player.getUUID(), session.playerA()) ? session.playerB() : session.playerA()
+                );
+                if (target != null) target.displayClientMessage(Component.translatable("jwnsprofilemod.profile.trade_rejected"), false);
+                String name = StringArgumentType.getString(context, "playerName");
+                player.displayClientMessage(Component.translatable("jwnsprofilemod.profile.trade_reject", name), false);
+            } else {
+                player.displayClientMessage(Component.translatable("jwnsprofilemod.trade.cannot_decline"), false);
+            }
         }
         return 1;
     }

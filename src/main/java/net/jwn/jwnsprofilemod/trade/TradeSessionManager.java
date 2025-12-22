@@ -41,7 +41,6 @@ public class TradeSessionManager {
         }
         if (playerA != null && playerA.containerMenu instanceof TradeMenu) {
             playerA.closeContainer();
-            playerA.displayClientMessage(Component.translatable("jwnsprofilemod.profile.trade_reject"), false);
         }
 
         ServerPlayer playerB = server.getPlayerList().getPlayer(session.playerB());
@@ -52,7 +51,6 @@ public class TradeSessionManager {
         if (playerB != null && playerB.containerMenu instanceof TradeMenu) {
             System.out.println(playerB.getPlainTextName());
             playerB.closeContainer();
-            playerB.displayClientMessage(Component.translatable("jwnsprofilemod.profile.trade_reject"), false);
         }
 
         SESSIONS.remove(session.id());

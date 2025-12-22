@@ -53,11 +53,6 @@ public class ModMessages {
                 RequestTradeC2SPacket::handle
         );
         registrar.playToServer(
-                TradeCanceledC2SPacket.TYPE,
-                TradeCanceledC2SPacket.STREAM_CODEC,
-                TradeCanceledC2SPacket::handle
-        );
-        registrar.playToServer(
                 TradeReadyC2SPacket.TYPE,
                 TradeReadyC2SPacket.STREAM_CODEC,
                 TradeReadyC2SPacket::handle

@@ -15,7 +15,10 @@
   "jwnsprofilemod.profile.cannot_trade_yourself": "You cannot trade with yourself.",
   "jwnsprofilemod.profile.already_trading": "This player is already in a trade.",
   "jwnsprofilemod.trade.title": "Trade",
-  "jwnsprofilemod.profile.trade_reject": "The other player has declined the trade.",
+  "jwnsprofilemod.profile.trade_reject": "You have declined %s's trade request.",
+  "jwnsprofilemod.profile.trade_rejected": "The other player has declined the trade.",
+  "jwnsprofilemod.trade.cannot_accept": "Cannot accept the trade.",
+  "jwnsprofilemod.trade.cannot_decline": "Cannot decline the trade.",
   "jwnsprofilemod.profile.trade_success": "The trade is successed",
   "jwnsprofilemod.profile.cannot_while_trading": "You cannot do this while trading.",
   "jwnsprofilemod.profile.other_player_already_trading": "The other player is already in another trade."
