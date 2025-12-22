@@ -2,7 +2,6 @@ package net.jwn.jwnsprofilemod.screen;
 
 import com.mojang.authlib.GameProfile;
 import net.jwn.jwnsprofilemod.JWNsProfileMod;
-import net.jwn.jwnsprofilemod.networking.packet.TradeCanceledC2SPacket;
 import net.jwn.jwnsprofilemod.networking.packet.TradeReadyC2SPacket;
 import net.jwn.jwnsprofilemod.trade.TradeMenu;
 import net.minecraft.client.Minecraft;
@@ -136,12 +135,5 @@ public class TradeScreen extends AbstractContainerScreen<TradeMenu> {
                 0.0F, 0.0F, DRAW_WIDTH, DRAW_HEIGHT,
                 DRAW_WIDTH, DRAW_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT
         );
-    }
-
-    @Override
-    public void onClose() {
-        super.onClose();
-        TradeCanceledC2SPacket packet = new TradeCanceledC2SPacket();
-        ClientPacketDistributor.sendToServer(packet);
     }
 }

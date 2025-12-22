@@ -28,7 +28,6 @@ public class TradeRequestHandleCommand {
         if (player != null) {
             TradeSession session = TradeSessionManager.get(player);
             if (session != null) {
-                session.playerBIsJoined();
                 player.openMenu(session, buf -> {
                     buf.writeUUID(session.playerA());
                     buf.writeUUID(session.playerB());

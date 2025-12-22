@@ -13,11 +13,16 @@ import java.util.UUID;
 
 public class TradeSession implements MenuProvider {
     private final UUID id;
+
     private final UUID playerA;
     private final UUID playerB;
-    private Boolean isPlayerBJoined = false;
+
+    private Boolean playerBJoined = false;
+    private Boolean playerAJoined = false;
+
     private final Container offerA = new SimpleContainer(9);
     private final Container offerB = new SimpleContainer(9);
+
     private Boolean playerAReady = false;
     private Boolean playerBReady = false;
 
@@ -27,25 +32,31 @@ public class TradeSession implements MenuProvider {
         this.playerB = playerB;
     }
 
+    // getter
     public UUID id() { return id; }
     public UUID playerA() { return playerA; }
     public UUID playerB() { return playerB; }
-    public Boolean isPlayerBJoined() { return isPlayerBJoined; }
+    public Boolean isPlayerAJoined() { return playerAJoined; }
+    public Boolean isPlayerBJoined() { return playerBJoined; }
     public Container offerA() { return offerA; }
     public Container offerB() { return offerB; }
-    public boolean playerAReady() { return playerAReady; }
-    public boolean playerBReady() { return playerBReady; }
+    public boolean isPlayerAReady() { return playerAReady; }
+    public boolean isPlayerBReady() { return playerBReady; }
 
     public void playerAisReady() { playerAReady = true; }
     public void playerBisReady() { playerBReady = true; }
+
+    public void playerAIsJoined() {
+        playerAJoined = true;
+    }
     public void playerBIsJoined() {
-        isPlayerBJoined = true;
+        playerBJoined = true;
     }
 
     private int life = 20 * 20;
 
     public void tick() {
-        if (!(isPlayerBJoined)) life -= 1;
+        if (!(playerBJoined)) life -= 1;
     }
 
     public int life() {
