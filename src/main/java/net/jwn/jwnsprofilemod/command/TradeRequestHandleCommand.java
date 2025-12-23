@@ -12,7 +12,10 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Objects;
@@ -49,6 +52,12 @@ public class TradeRequestHandleCommand {
     private int accept(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player != null) {
+            System.out.println(isSafe(player));
+            if (!(isSafe(player))) {
+                player.displayClientMessage(Component.translatable("jwnsprofilemod.trade.not_safe"), false);
+                return 1;
+            }
+
             TradeSession session = TradeSessionManager.get(player);
             if (session != null) {
                 player.openMenu(session, buf -> {
@@ -67,6 +76,11 @@ public class TradeRequestHandleCommand {
     private int reject(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player != null) {
+            if (!(isSafe(player))) {
+                player.displayClientMessage(Component.translatable("jwnsprofilemod.trade.not_safe"), false);
+                return 1;
+            }
+
             TradeSession session = TradeSessionManager.get(player);
             if (session != null) {
                 TradeSessionManager.sessionClose(session, player.level().getServer());
@@ -81,5 +95,15 @@ public class TradeRequestHandleCommand {
             }
         }
         return 1;
+    }
+
+    private boolean isSafe(ServerPlayer player) {
+        AABB box = player.getBoundingBox().inflate(8.0);
+
+        return player.level().getEntitiesOfClass(
+                Monster.class,
+                box,
+                Entity::isAlive
+        ).isEmpty();
     }
 }

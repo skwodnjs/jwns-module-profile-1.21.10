@@ -16,8 +16,11 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerSkin;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 import java.time.Duration;
@@ -64,14 +67,27 @@ public class ProfileScreen extends Screen {
                 () -> Minecraft.getInstance().setScreen(new GuestbookScreen(profile)),
                 // 교환 요청
                 () -> {
-                    if (Minecraft.getInstance().player != null) {
-                        if (Objects.equals(Minecraft.getInstance().player.getUUID(), profile.getUUID())) {
-                            Minecraft.getInstance().player.displayClientMessage(Component.translatable("jwnsprofilemod.profile.cannot_trade_yourself"), false);
+                    if (Minecraft.getInstance().player != null && Minecraft.getInstance().level != null) {
+                        AABB box = Minecraft.getInstance().player.getBoundingBox().inflate(8.0);
+                        boolean isSafe = Minecraft.getInstance().level.getEntitiesOfClass(
+                                Monster.class,
+                                box,
+                                Entity::isAlive
+                        ).isEmpty();
+                        if (!(isSafe)) {
+                            Minecraft.getInstance().player.displayClientMessage(Component.translatable("jwnsprofilemod.trade.not_safe"), false);
                             onClose();
-                        } else {
-                            RequestTradeC2SPacket packet = new RequestTradeC2SPacket(profile.getUUID());
-                            ClientPacketDistributor.sendToServer(packet);
-                            onClose();
+                        }
+
+                        else {
+                            if (Objects.equals(Minecraft.getInstance().player.getUUID(), profile.getUUID())) {
+                                Minecraft.getInstance().player.displayClientMessage(Component.translatable("jwnsprofilemod.profile.cannot_trade_yourself"), false);
+                                onClose();
+                            } else {
+                                RequestTradeC2SPacket packet = new RequestTradeC2SPacket(profile.getUUID());
+                                ClientPacketDistributor.sendToServer(packet);
+                                onClose();
+                            }
                         }
                     }
                 },

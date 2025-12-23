@@ -22,5 +22,6 @@
   "jwnsprofilemod.profile.trade_success": "The trade is successed",
   "jwnsprofilemod.profile.cannot_while_trading": "You cannot do this while trading.",
   "jwnsprofilemod.profile.other_player_already_trading": "The other player is already in another trade.",
-  "jwnsprofilemod.trade.canceled": "The trade has been canceled."
+  "jwnsprofilemod.trade.canceled": "The trade has been canceled.",
+  "jwnsprofilemod.trade.not_safe": "You cannot trade because there are monsters nearby."
 }
