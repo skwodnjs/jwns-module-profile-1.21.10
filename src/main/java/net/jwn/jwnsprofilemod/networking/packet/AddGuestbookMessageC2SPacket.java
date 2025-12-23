@@ -27,7 +27,7 @@ public record AddGuestbookMessageC2SPacket(ProfileData.PlayerProfile profile, Pr
     public static void handle(final AddGuestbookMessageC2SPacket data, final IPayloadContext context) {
         context.enqueueWork(() -> {
             if (!(context.player() instanceof ServerPlayer serverPlayer)) return;
-            ProfileData profileData = ProfileData.get(serverPlayer.level());
+            ProfileData profileData = ProfileData.get(serverPlayer.level().getServer());
             profileData.addPlayerGuestbook(data.profile().getName(), data.guestbookEntry());
         }).exceptionally(e -> {
             System.err.println(e.getMessage());

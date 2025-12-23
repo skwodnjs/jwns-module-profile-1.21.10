@@ -27,7 +27,7 @@ public record EditAboutMeC2SPacket(String aboutMe) implements CustomPacketPayloa
     public static void handle(final EditAboutMeC2SPacket data, final IPayloadContext context) {
         context.enqueueWork(() -> {
             if (!(context.player() instanceof ServerPlayer serverPlayer)) return;
-            ProfileData profileData = ProfileData.get(serverPlayer.level());
+            ProfileData profileData = ProfileData.get(serverPlayer.level().getServer());
             profileData.setPlayerAboutMe(serverPlayer, data.aboutMe());
         }).exceptionally(e -> {
             System.err.println(e.getMessage());

@@ -7,8 +7,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
@@ -102,7 +104,7 @@ public class ProfileData extends SavedData {
 
         /* ===== setters ===== */
 
-        private void setLevel(int level) {
+        private void setExpLevel(int level) {
             this.level = level;
         }
 
@@ -148,15 +150,19 @@ public class ProfileData extends SavedData {
         this.players = new HashMap<>();
     }
 
-    public static ProfileData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(TYPE);
+    public static ProfileData get(MinecraftServer server) {
+        ServerLevel overworld = server.getLevel(Level.OVERWORLD);
+        if (overworld == null) {
+            throw new IllegalStateException("Overworld not loaded");
+        }
+        return overworld.getDataStorage().computeIfAbsent(TYPE);
     }
 
-    public PlayerProfile getProfile(Player player) {
+    public PlayerProfile getPlayerProfile(Player player) {
         return players.get(player.getUUID());
     }
 
-    public PlayerProfile getProfile(String name) {
+    public PlayerProfile getPlayerProfile(String name) {
         for (PlayerProfile profile : players.values()) {
             if (profile.getName().equals(name)) {
                 return profile;
@@ -166,12 +172,12 @@ public class ProfileData extends SavedData {
     }
 
     public void createPlayerProfileIfAbsent(Player player) {
-        players.computeIfAbsent(player.getGameProfile().id(), uuid -> new PlayerProfile(player.getGameProfile()));
+        players.computeIfAbsent(player.getUUID(), uuid -> new PlayerProfile(player.getGameProfile()));
     }
 
-    public void setPlayerLevel(Player player, int level) {
+    public void setPlayerLevel(Player player, int expLevel) {
         if (players.get(player.getUUID()) == null) return;
-        players.get(player.getUUID()).setLevel(level);
+        players.get(player.getUUID()).setExpLevel(expLevel);
         setDirty();
     }
 

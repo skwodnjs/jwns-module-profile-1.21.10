@@ -26,7 +26,7 @@ public class ModEvents {
     public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
         if (player instanceof ServerPlayer serverPlayer) {
-            ProfileData profileData = ProfileData.get(serverPlayer.level());
+            ProfileData profileData = ProfileData.get(serverPlayer.level().getServer());
             profileData.createPlayerProfileIfAbsent(serverPlayer);
         }
     }
@@ -35,7 +35,7 @@ public class ModEvents {
     public static void onPlayerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
         Player player = event.getEntity();
         if (player instanceof ServerPlayer serverPlayer) {
-            ProfileData profileData = ProfileData.get(serverPlayer.level());
+            ProfileData profileData = ProfileData.get(serverPlayer.level().getServer());
             profileData.setPlayerLevel(serverPlayer, serverPlayer.experienceLevel);
             profileData.setPlayerlastLogoutAt(serverPlayer, System.currentTimeMillis());
         }

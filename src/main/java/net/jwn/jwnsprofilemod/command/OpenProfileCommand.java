@@ -26,16 +26,16 @@ public class OpenProfileCommand {
         MinecraftServer server = context.getSource().getServer();
         ServerPlayer player = server.getPlayerList().getPlayerByName(name);
 
-        ProfileData data = ProfileData.get(context.getSource().getLevel());
+        ProfileData data = ProfileData.get(context.getSource().getServer());
         ProfileData.PlayerProfile profile;
         OpenProfileScreenS2CPacket packet;
 
         if (player != null) {
-            profile = data.getProfile(player);
+            profile = data.getPlayerProfile(player);
             data.setPlayerLevel(player, player.experienceLevel);
             packet = new OpenProfileScreenS2CPacket(profile, true);
         } else {
-            profile = data.getProfile(name);
+            profile = data.getPlayerProfile(name);
             if (profile != null) packet = new OpenProfileScreenS2CPacket(profile, false);
             else {
                 if (context.getSource().getPlayer() != null)
