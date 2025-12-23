@@ -69,13 +69,11 @@ public class ModEvents {
 
             // 닫음 처리
             if (session.isPlayerAJoined() && !(playerA.containerMenu instanceof TradeMenu)) {
-                if (session.isPlayerBJoined())
-                    playerA.displayClientMessage(Component.translatable("jwnsprofilemod.trade.canceled"), false);
+                playerA.displayClientMessage(Component.translatable("jwnsprofilemod.trade.canceled"), false);
                 tradeCanceled(session, server, playerA);
             }
             if (session.isPlayerBJoined() && !(playerB.containerMenu instanceof TradeMenu)) {
-                if (session.isPlayerAJoined())
-                    playerB.displayClientMessage(Component.translatable("jwnsprofilemod.trade.canceled"), false);
+                playerB.displayClientMessage(Component.translatable("jwnsprofilemod.trade.canceled"), false);
                 tradeCanceled(session, server, playerB);
             }
         }

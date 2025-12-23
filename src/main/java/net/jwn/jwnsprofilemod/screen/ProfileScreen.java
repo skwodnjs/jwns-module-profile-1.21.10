@@ -11,7 +11,6 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;

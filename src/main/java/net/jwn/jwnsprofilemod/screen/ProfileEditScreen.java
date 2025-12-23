@@ -68,6 +68,7 @@ public class ProfileEditScreen extends Screen {
         editBox.setX(x + 10);
         editBox.setY(y + 53);
         editBox.setValueListener(text -> aboutMe = text);
+        editBox.setValue(profile.getAboutMe());
         addRenderableWidget(editBox);
     }
 
