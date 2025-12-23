@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class TradeSession implements MenuProvider {
+
+    private int life = 20 * 60; // 60 sec
+
     private final UUID id;
 
     private final UUID playerA;
@@ -52,8 +55,6 @@ public class TradeSession implements MenuProvider {
     public void playerBIsJoined() {
         playerBJoined = true;
     }
-
-    private int life = 20 * 20;
 
     public void tick() {
         if (!(playerBJoined)) life -= 1;

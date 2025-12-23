@@ -171,6 +171,10 @@ public class ProfileData extends SavedData {
         return null;
     }
 
+    public Collection<PlayerProfile> getAllProfiles() {
+        return players.values();
+    }
+
     public void createPlayerProfileIfAbsent(Player player) {
         players.computeIfAbsent(player.getUUID(), uuid -> new PlayerProfile(player.getGameProfile()));
     }
