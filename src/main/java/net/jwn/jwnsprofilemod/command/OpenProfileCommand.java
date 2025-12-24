@@ -7,6 +7,7 @@ import net.jwn.jwnsprofilemod.networking.packet.OpenProfileScreenS2CPacket;
 import net.jwn.jwnsprofilemod.profile.ProfileData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,8 +18,17 @@ import java.util.Objects;
 public class OpenProfileCommand {
     public OpenProfileCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("profile")
-                .then(Commands.argument("playerName", StringArgumentType.string())
-                        .executes(this::execute)));
+                .then(Commands.argument("playerName", StringArgumentType.word())
+                .suggests((ctx, builder) -> {
+                    ProfileData data = ProfileData.get(ctx.getSource().getServer());
+
+                    return SharedSuggestionProvider.suggest(
+                            data.getAllProfiles().stream()
+                                    .map(ProfileData.PlayerProfile::getName),
+                            builder
+                    );
+                })
+                .executes(this::execute)));
     }
 
     private int execute(CommandContext<CommandSourceStack> context) {
