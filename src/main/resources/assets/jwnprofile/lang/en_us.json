@@ -1,0 +1,29 @@
+{
+  "jwnprofile.minute": "minute",
+  "jwnprofile.hour": "hour",
+
+  "jwnprofile.profile.status.online": "online",
+  "jwnprofile.profile.status.offline": "Last logout %s ago",
+  "jwnprofile.profile.guestbook": "View Guestbook",
+  "jwnprofile.profile.trade_request": "Request Trade",
+  "jwnprofile.profile.whisper": "Whisper",
+  "jwnprofile.profile.search_failed": "Profile not found.",
+  "jwnprofile.profile.enter_about_me": "Please enter your bio.",
+  "jwnprofile.profile_edit.save": "save",
+  "jwnprofile.profile_edit.exit": "exit",
+
+  "jwnprofile.guestbook.title": "%s's guestbook",
+  "jwnprofile.profile.offline_message": "The player is now offline.",
+  "jwnprofile.profile.cannot_trade_yourself": "You cannot trade with yourself.",
+  "jwnprofile.profile.already_trading": "This player is already in a trade.",
+  "jwnprofile.trade.title": "Trade",
+  "jwnprofile.profile.trade_reject": "You have declined %s's trade request.",
+  "jwnprofile.profile.trade_rejected": "The other player has declined the trade.",
+  "jwnprofile.trade.cannot_accept": "Cannot accept the trade.",
+  "jwnprofile.trade.cannot_decline": "Cannot decline the trade.",
+  "jwnprofile.profile.trade_success": "The trade is successed",
+  "jwnprofile.profile.cannot_while_trading": "You cannot do this while trading.",
+  "jwnprofile.profile.other_player_already_trading": "The other player is already in another trade.",
+  "jwnprofile.trade.canceled": "The trade has been canceled.",
+  "jwnprofile.trade.not_safe": "You cannot trade because there are monsters nearby."
+}

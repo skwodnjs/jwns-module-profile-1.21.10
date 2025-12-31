@@ -1,0 +1,29 @@
+{
+  "jwnprofile.minute": "분",
+  "jwnprofile.hour": "시간",
+
+  "jwnprofile.profile.status.online": "접속중",
+  "jwnprofile.profile.status.offline": "%s 전 접속 종료",
+  "jwnprofile.profile.guestbook": "방명록 보기",
+  "jwnprofile.profile.trade_request": "교환 요청",
+  "jwnprofile.profile.whisper": "귓속말",
+  "jwnprofile.profile.search_failed": "프로필이 존재하지 않습니다.",
+  "jwnprofile.profile.enter_about_me": "자기소개를 입력해주세요.",
+  "jwnprofile.profile_edit.save": "저장하기",
+  "jwnprofile.profile_edit.exit": "나가기",
+
+  "jwnprofile.guestbook.title": "%s의 방명록",
+  "jwnprofile.profile.offline_message": "플레이어가 현재 접속중이 아닙니다.",
+  "jwnprofile.profile.cannot_trade_yourself": "본인과는 거래할 수 없습니다.",
+  "jwnprofile.profile.already_trading": "이미 거래 중인 플레이어입니다.",
+  "jwnprofile.trade.title": "교환하기",
+  "jwnprofile.profile.trade_reject": "%s 님의 교환을 거절하였습니다.",
+  "jwnprofile.profile.trade_rejected": "상대방이 교환을 거절하였습니다.",
+  "jwnprofile.trade.cannot_accept": "교환을 수락할 수 없습니다.",
+  "jwnprofile.trade.cannot_decline": "교환을 거절할 수 없습니다.",
+  "jwnprofile.profile.trade_success": "교환을 성공하였습니다.",
+  "jwnprofile.profile.cannot_while_trading": "거래중에는 할 수 없습니다.",
+  "jwnprofile.profile.other_player_already_trading": "상대방이 다른 거래중입니다.",
+  "jwnprofile.trade.canceled": "교환이 취소되었습니다.",
+  "jwnprofile.trade.not_safe": "근처에 몬스터가 있어 거래를 할 수 없습니다."
+}
