@@ -3,6 +3,7 @@ package net.jwn.jwnprofile.screen;
 import net.jwn.jwnprofile.JWNsProfileMod;
 import net.jwn.jwnprofile.networking.packet.AddGuestbookMessageC2SPacket;
 import net.jwn.jwnprofile.profile.ProfileData;
+import net.jwn.jwnprofile.util.GuestbookEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
@@ -50,15 +51,17 @@ public class GuestbookEditScreen extends Screen {
         ImageButton imageButton3 = new ImageButton(
                 (this.width - BUTTON_WIDTH) / 2, y + 105 + 36, BUTTON_WIDTH, BUTTON_HEIGHT, new WidgetSprites(BUTTON, BUTTON_PRESSED),
                 button -> {
-                    System.out.println("PRESSED");
                     assert Minecraft.getInstance().player != null;
-                    ProfileData.GuestbookEntry guestbookEntry = new ProfileData.GuestbookEntry(
+                    GuestbookEntry guestbookEntry = new GuestbookEntry(
                             System.currentTimeMillis(),
                             Minecraft.getInstance().player.getPlainTextName(),
-                            message
+                            Minecraft.getInstance().player.getUUID(),
+                            message,
+                            false
                     );
                     AddGuestbookMessageC2SPacket packet = new AddGuestbookMessageC2SPacket(profile, guestbookEntry);
                     ClientPacketDistributor.sendToServer(packet);
+                    Minecraft.getInstance().player.displayClientMessage(Component.translatable("jwnprofile.guestbook.send", profile.getName()), false);
                     this.onClose();
                 });
         addRenderableWidget(imageButton3);
@@ -85,7 +88,7 @@ public class GuestbookEditScreen extends Screen {
         graphics.drawString(this.font, this.title, x + 13, y + 8, 0xFF000000, false);
 
         Component text2 = Component.translatable("jwnprofile.profile_edit.exit");
-        Component text3 = Component.translatable("jwnprofile.profile_edit.save");
+        Component text3 = Component.translatable("jwnprofile.profile_edit.send");
 
         graphics.drawString(this.font, text2, (this.width - font.width(text2)) / 2, y + 126, 0xFF000000, false);
         graphics.drawString(this.font, text3, (this.width - font.width(text3)) / 2, y + 144, 0xFF000000, false);

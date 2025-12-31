@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.jwn.jwnprofile.util.GuestbookEntry;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -123,22 +124,22 @@ public class ProfileData extends SavedData {
         }
     }
 
-    public record GuestbookEntry(Long time, String writer, String message) {
-        public static final Codec<GuestbookEntry> CODEC =
-                RecordCodecBuilder.create(instance -> instance.group(
-                        Codec.LONG.fieldOf("time").forGetter(GuestbookEntry::time),
-                        Codec.STRING.fieldOf("writer").forGetter(GuestbookEntry::writer),
-                        Codec.STRING.fieldOf("message").forGetter(GuestbookEntry::message)
-                ).apply(instance, GuestbookEntry::new));
-
-        public static final StreamCodec<ByteBuf, GuestbookEntry> STREAM_CODEC =
-                StreamCodec.composite(
-                        ByteBufCodecs.VAR_LONG, GuestbookEntry::time,
-                        ByteBufCodecs.STRING_UTF8, GuestbookEntry::writer,
-                        ByteBufCodecs.STRING_UTF8, GuestbookEntry::message,
-                        GuestbookEntry::new
-                );
-    }
+//    public record GuestbookEntry(Long time, String writer, String message) {
+//        public static final Codec<GuestbookEntry> CODEC =
+//                RecordCodecBuilder.create(instance -> instance.group(
+//                        Codec.LONG.fieldOf("time").forGetter(GuestbookEntry::time),
+//                        Codec.STRING.fieldOf("writer").forGetter(GuestbookEntry::writer),
+//                        Codec.STRING.fieldOf("message").forGetter(GuestbookEntry::message)
+//                ).apply(instance, GuestbookEntry::new));
+//
+//        public static final StreamCodec<ByteBuf, GuestbookEntry> STREAM_CODEC =
+//                StreamCodec.composite(
+//                        ByteBufCodecs.VAR_LONG, GuestbookEntry::time,
+//                        ByteBufCodecs.STRING_UTF8, GuestbookEntry::writer,
+//                        ByteBufCodecs.STRING_UTF8, GuestbookEntry::message,
+//                        GuestbookEntry::new
+//                );
+//    }
 
     private final Map<UUID, PlayerProfile> players;
 

@@ -3,6 +3,7 @@ package net.jwn.jwnprofile.screen;
 import net.jwn.jwnprofile.JWNsProfileMod;
 import net.jwn.jwnprofile.profile.ProfileData;
 import net.jwn.jwnprofile.util.Functions;
+import net.jwn.jwnprofile.util.GuestbookEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
@@ -13,7 +14,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GuestbookScreen extends Screen {
     private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "textures/gui/guestbook_gui.png");
@@ -27,7 +30,10 @@ public class GuestbookScreen extends Screen {
     private final ProfileData.PlayerProfile profile;
 
     protected GuestbookScreen(ProfileData.PlayerProfile profile) {
-        super(Component.translatable("jwnprofile.guestbook.title", profile.getName()));
+        super((Minecraft.getInstance().player != null) && Objects.equals(profile.getUUID(), Minecraft.getInstance().player.getUUID())
+                ? Component.translatable("jwnprofile.guestbook.title_me")
+                : Component.translatable("jwnprofile.guestbook.title", profile.getName())
+        );
         this.profile = profile;
     }
 
@@ -40,15 +46,19 @@ public class GuestbookScreen extends Screen {
     int y;
     int index = 0;
 
+    private final List<GuestbookEntry> messages = new ArrayList<>();
+
     @Override
     protected void init() {
         x = (this.width - DRAW_WIDTH) / 2;
         y = (this.height - DRAW_HEIGHT) / 2;
 
-        addRenderableWidget(new ImageButton(
-                x + 158, y + 11, 7, 7, new WidgetSprites(EDIT_BUTTON, EDIT_BUTTON_PRESSED),
-                button -> Minecraft.getInstance().setScreen(new GuestbookEditScreen(profile))
-        ));
+        if ((Minecraft.getInstance().player != null) && !(Objects.equals(profile.getUUID(), Minecraft.getInstance().player.getUUID()))) {
+            addRenderableWidget(new ImageButton(
+                    x + 158, y + 11, 7, 7, new WidgetSprites(EDIT_BUTTON, EDIT_BUTTON_PRESSED),
+                    button -> Minecraft.getInstance().setScreen(new GuestbookEditScreen(profile))
+            ));
+        }
 
         addRenderableWidget(new ImageButton(
                 x + 56, y + 147, 14, 14, new WidgetSprites(BACK_BUTTON, BACK_BUTTON_PRESSED),
@@ -62,6 +72,16 @@ public class GuestbookScreen extends Screen {
                     if (profile.getGuestbook().size() > index + 3) index += 3;
                 }
         ));
+
+        if ((Minecraft.getInstance().player != null) && Objects.equals(Minecraft.getInstance().player.getUUID(), profile.getUUID())) {
+            this.messages.addAll(profile.getGuestbook());
+        } else {
+            for (GuestbookEntry entry : profile.getGuestbook()) {
+                if (Objects.equals(entry.writerUUID(), Minecraft.getInstance().player.getUUID())) {
+                    this.messages.add(entry);
+                }
+            }
+        }
     }
 
     @Override
@@ -78,8 +98,8 @@ public class GuestbookScreen extends Screen {
         graphics.drawString(this.font, this.title, x + 8, y + 8, 0xFF000000, false);
 
         for (int i = 0; i < 3; i++) {
-            if (index + i < profile.getGuestbook().size()) {
-                ProfileData.GuestbookEntry entry = profile.getGuestbook().get(index + i);
+            if (index + i < messages.size()) {
+                GuestbookEntry entry = messages.get(index + i);
                 String time = java.time.Instant.ofEpochMilli(entry.time())
                         .atZone(java.time.ZoneId.systemDefault())
                         .format(java.time.format.DateTimeFormatter.ofPattern("yyyy/M/d HH:mm"));

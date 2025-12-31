@@ -195,7 +195,12 @@ public class ProfileScreen extends Screen {
             );
         }
 
-        Component text1 = Component.translatable("jwnprofile.profile.guestbook");
+        Component text1;
+        if (Minecraft.getInstance().player != null && Objects.equals(Minecraft.getInstance().player.getUUID(), profile.getUUID())) {
+            text1 = Component.translatable("jwnprofile.profile.guestbook_me");
+        } else {
+            text1 = Component.translatable("jwnprofile.profile.guestbook");
+        }
         Component text2 = Component.translatable("jwnprofile.profile.trade_request");
         Component text3 = Component.translatable("jwnprofile.profile.whisper");
 
