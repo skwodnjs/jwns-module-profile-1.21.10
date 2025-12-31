@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import net.jwn.jwnprofile.networking.packet.CloseTradeToastS2CPacket;
 import net.jwn.jwnprofile.trade.TradeSession;
 import net.jwn.jwnprofile.trade.TradeSessionManager;
+import net.jwn.jwnprofile.util.Functions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -27,8 +28,7 @@ public class TradeRequestHandleCommand {
     private int accept(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player != null) {
-            System.out.println(isSafe(player));
-            if (!(isSafe(player))) {
+            if (!(Functions.isSafe(player))) {
                 player.displayClientMessage(Component.translatable("jwnprofile.trade.not_safe"), false);
                 return 1;
             }
@@ -64,15 +64,5 @@ public class TradeRequestHandleCommand {
             }
         }
         return 1;
-    }
-
-    private boolean isSafe(ServerPlayer player) {
-        AABB box = player.getBoundingBox().inflate(8.0);
-
-        return player.level().getEntitiesOfClass(
-                Monster.class,
-                box,
-                Entity::isAlive
-        ).isEmpty();
     }
 }

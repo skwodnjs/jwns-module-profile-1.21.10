@@ -33,5 +33,6 @@
   "jwnprofile.trade.not_safe": "You cannot trade because there are monsters nearby.",
   "jwnprofile.message.trade.requested": "%s has requested a trade.",
 
-  "jwnprofile.message.not_read": "You have %d unread message(s)."
+  "jwnprofile.message.not_read": "You have %d unread message(s).",
+  "jwnprofile.message.player_not_exists": "Player not found."
 }

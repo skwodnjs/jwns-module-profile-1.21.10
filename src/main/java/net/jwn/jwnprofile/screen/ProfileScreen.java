@@ -68,14 +68,8 @@ public class ProfileScreen extends Screen {
                 () -> Minecraft.getInstance().setScreen(new MessagesScreen(profile)),
                 // 교환 요청
                 () -> {
-                    if (Minecraft.getInstance().player != null && Minecraft.getInstance().level != null) {
-                        AABB box = Minecraft.getInstance().player.getBoundingBox().inflate(8.0);
-                        boolean isSafe = Minecraft.getInstance().level.getEntitiesOfClass(
-                                Monster.class,
-                                box,
-                                Entity::isAlive
-                        ).isEmpty();
-                        if (!(isSafe)) {
+                    if (Minecraft.getInstance().player != null) {
+                        if (!(Functions.isSafe(Minecraft.getInstance().player))) {
                             Minecraft.getInstance().player.displayClientMessage(Component.translatable("jwnprofile.trade.not_safe"), false);
                             onClose();
                         }

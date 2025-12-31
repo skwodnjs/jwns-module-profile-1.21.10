@@ -11,5 +11,6 @@ public class ModCommands {
     public static void onRegisterCommandsEvent(RegisterCommandsEvent event) {
         new OpenProfileCommand(event.getDispatcher());
         new TradeRequestHandleCommand(event.getDispatcher());
+        new TradeRequestCommand(event.getDispatcher());
     }
 }
