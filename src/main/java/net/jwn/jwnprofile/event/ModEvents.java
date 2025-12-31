@@ -51,7 +51,6 @@ public class ModEvents {
             ServerPlayer playerA = server.getPlayerList().getPlayer(session.playerA());
             ServerPlayer playerB = server.getPlayerList().getPlayer(session.playerB());
 
-            // 둘 다 접속중
             if (playerA == null || playerB == null) {
                 TradeSessionManager.sessionClose(session, server);
                 ServerPlayer target = server.getPlayerList().getPlayer(playerA == null ? session.playerB() : session.playerA());

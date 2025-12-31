@@ -51,11 +51,6 @@ public class TradeRequestHandleCommand {
     private int reject(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player != null) {
-            if (!(isSafe(player))) {
-                player.displayClientMessage(Component.translatable("jwnprofile.trade.not_safe"), false);
-                return 1;
-            }
-
             TradeSession session = TradeSessionManager.get(player);
             if (session != null) {
                 TradeSessionManager.sessionClose(session, player.level().getServer());
