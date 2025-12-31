@@ -2,6 +2,7 @@ package net.jwn.jwnprofile.screen;
 
 import com.mojang.authlib.GameProfile;
 import net.jwn.jwnprofile.JWNsProfileMod;
+import net.jwn.jwnprofile.networking.packet.ReadAllMessagesC2SPacket;
 import net.jwn.jwnprofile.networking.packet.RequestTradeC2SPacket;
 import net.jwn.jwnprofile.profile.ProfileData;
 import net.jwn.jwnprofile.util.Functions;

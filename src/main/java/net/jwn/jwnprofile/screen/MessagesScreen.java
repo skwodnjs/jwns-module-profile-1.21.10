@@ -1,6 +1,7 @@
 package net.jwn.jwnprofile.screen;
 
 import net.jwn.jwnprofile.JWNsProfileMod;
+import net.jwn.jwnprofile.networking.packet.ReadAllMessagesC2SPacket;
 import net.jwn.jwnprofile.profile.ProfileData;
 import net.jwn.jwnprofile.util.Functions;
 import net.jwn.jwnprofile.util.GuestbookEntry;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,10 @@ public class MessagesScreen extends Screen {
                 ? Component.translatable("jwnprofile.guestbook.title_me")
                 : Component.translatable("jwnprofile.guestbook.title", profile.getName())
         );
+        if ((Minecraft.getInstance().player != null) && Objects.equals(profile.getUUID(), Minecraft.getInstance().player.getUUID())) {
+            ReadAllMessagesC2SPacket readAllMessagesC2SPacket = new ReadAllMessagesC2SPacket();
+            ClientPacketDistributor.sendToServer(readAllMessagesC2SPacket);
+        }
         this.profile = profile;
     }
 
@@ -111,6 +117,16 @@ public class MessagesScreen extends Screen {
                 for (int j = 0; j < lines.size() && j < 3; j++) {
                     graphics.drawString(this.font, lines.get(j), x + 11, y + 34 + i * 42 + j * lineHeight,
                             0xFF000000, false);
+                }
+                if ((Minecraft.getInstance().player != null)
+                        && Objects.equals(profile.getUUID(), Minecraft.getInstance().player.getUUID())
+                        && !(entry.isRead())) {
+                    int posX = x + 158;
+                    int posY = y + 25 + i * 42;
+                    int size = 3;
+                    if ((System.currentTimeMillis() / 500) % 2 == 0) {
+                        graphics.fill(posX, posY, posX + size, posY + size, 0xFFFF0000);
+                    }
                 }
             }
         }

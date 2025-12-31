@@ -10,7 +10,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -122,6 +121,14 @@ public class ProfileData extends SavedData {
             List<GuestbookEntry> newList = new ArrayList<>(this.guestbook);
             newList.addFirst(guestbook);
             this.guestbook = newList;
+        }
+
+        public int notReadMessages() {
+            return (int) this.guestbook.stream().filter(entry -> !entry.isRead()).count();
+        }
+
+        public void readAllMessages() {
+            this.guestbook.forEach(entry -> entry.setRead(true));
         }
     }
 

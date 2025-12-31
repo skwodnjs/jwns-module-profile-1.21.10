@@ -57,6 +57,11 @@ public class ModMessages {
                 TradeReadyC2SPacket.STREAM_CODEC,
                 TradeReadyC2SPacket::handle
         );
+        registrar.playToServer(
+                ReadAllMessagesC2SPacket.TYPE,
+                ReadAllMessagesC2SPacket.STREAM_CODEC,
+                ReadAllMessagesC2SPacket::handle
+        );
     }
 
     @SubscribeEvent

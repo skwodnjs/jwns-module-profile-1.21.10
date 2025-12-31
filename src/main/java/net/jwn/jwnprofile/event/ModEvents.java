@@ -28,6 +28,8 @@ public class ModEvents {
         if (player instanceof ServerPlayer serverPlayer) {
             ProfileData profileData = ProfileData.get(serverPlayer.level().getServer());
             profileData.createPlayerProfileIfAbsent(serverPlayer);
+            int i = profileData.getPlayerProfile(serverPlayer).notReadMessages();
+            if (i > 0) serverPlayer.displayClientMessage(Component.translatable("jwnprofile.message.not_read", i), false);
         }
     }
 
