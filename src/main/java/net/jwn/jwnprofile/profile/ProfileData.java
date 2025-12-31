@@ -10,6 +10,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -70,7 +71,7 @@ public class ProfileData extends SavedData {
         }
 
         public PlayerProfile(String name, UUID playerUUID) {
-            this(name, playerUUID, 0, 0L, "", List.of());
+            this(name, playerUUID, 0, 0L, "", new ArrayList<>());
         }
 
         public PlayerProfile(GameProfile profile) {
@@ -123,23 +124,6 @@ public class ProfileData extends SavedData {
             this.guestbook = newList;
         }
     }
-
-//    public record GuestbookEntry(Long time, String writer, String message) {
-//        public static final Codec<GuestbookEntry> CODEC =
-//                RecordCodecBuilder.create(instance -> instance.group(
-//                        Codec.LONG.fieldOf("time").forGetter(GuestbookEntry::time),
-//                        Codec.STRING.fieldOf("writer").forGetter(GuestbookEntry::writer),
-//                        Codec.STRING.fieldOf("message").forGetter(GuestbookEntry::message)
-//                ).apply(instance, GuestbookEntry::new));
-//
-//        public static final StreamCodec<ByteBuf, GuestbookEntry> STREAM_CODEC =
-//                StreamCodec.composite(
-//                        ByteBufCodecs.VAR_LONG, GuestbookEntry::time,
-//                        ByteBufCodecs.STRING_UTF8, GuestbookEntry::writer,
-//                        ByteBufCodecs.STRING_UTF8, GuestbookEntry::message,
-//                        GuestbookEntry::new
-//                );
-//    }
 
     private final Map<UUID, PlayerProfile> players;
 

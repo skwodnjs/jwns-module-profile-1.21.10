@@ -64,7 +64,7 @@ public class ProfileScreen extends Screen {
 
         List<Runnable> actions = List.of(
                 // 방명록
-                () -> Minecraft.getInstance().setScreen(new GuestbookScreen(profile)),
+                () -> Minecraft.getInstance().setScreen(new MessagesScreen(profile)),
                 // 교환 요청
                 () -> {
                     if (Minecraft.getInstance().player != null && Minecraft.getInstance().level != null) {

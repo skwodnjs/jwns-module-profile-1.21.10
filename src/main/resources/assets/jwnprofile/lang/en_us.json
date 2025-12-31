@@ -16,6 +16,7 @@
 
   "jwnprofile.guestbook.send": "Message sent to %s",
   "jwnprofile.guestbook.title": "Messages to %s",
+  "jwnprofile.guestbook.send_title": "Send message to %s",
   "jwnprofile.guestbook.title_me": "Received Messages",
   "jwnprofile.profile.offline_message": "The player is now offline.",
   "jwnprofile.profile.cannot_trade_yourself": "You cannot trade with yourself.",

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class GuestbookScreen extends Screen {
+public class MessagesScreen extends Screen {
     private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "textures/gui/guestbook_gui.png");
     private static final ResourceLocation BACK_BUTTON = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "back_button");
     private static final ResourceLocation BACK_BUTTON_PRESSED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "back_button_highlighted");
@@ -29,7 +29,7 @@ public class GuestbookScreen extends Screen {
 
     private final ProfileData.PlayerProfile profile;
 
-    protected GuestbookScreen(ProfileData.PlayerProfile profile) {
+    public MessagesScreen(ProfileData.PlayerProfile profile) {
         super((Minecraft.getInstance().player != null) && Objects.equals(profile.getUUID(), Minecraft.getInstance().player.getUUID())
                 ? Component.translatable("jwnprofile.guestbook.title_me")
                 : Component.translatable("jwnprofile.guestbook.title", profile.getName())
@@ -56,7 +56,7 @@ public class GuestbookScreen extends Screen {
         if ((Minecraft.getInstance().player != null) && !(Objects.equals(profile.getUUID(), Minecraft.getInstance().player.getUUID()))) {
             addRenderableWidget(new ImageButton(
                     x + 158, y + 11, 7, 7, new WidgetSprites(EDIT_BUTTON, EDIT_BUTTON_PRESSED),
-                    button -> Minecraft.getInstance().setScreen(new GuestbookEditScreen(profile))
+                    button -> Minecraft.getInstance().setScreen(new SendMessageScreen(profile))
             ));
         }
 

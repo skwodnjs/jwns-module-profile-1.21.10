@@ -15,15 +15,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
-public class GuestbookEditScreen extends Screen {
+public class SendMessageScreen extends Screen {
     private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "textures/gui/edit_gui.png");
     private static final ResourceLocation BUTTON = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "button");
     private static final ResourceLocation BUTTON_PRESSED = ResourceLocation.fromNamespaceAndPath(JWNsProfileMod.MOD_ID, "button_highlighted");
     private final ProfileData.PlayerProfile profile;
     private static String message = "";
 
-    protected GuestbookEditScreen(ProfileData.PlayerProfile profile) {
-        super(Component.translatable("jwnprofile.guestbook.title", profile.getName()));
+    protected SendMessageScreen(ProfileData.PlayerProfile profile) {
+        super(Component.translatable("jwnprofile.guestbook.send_title", profile.getName()));
         this.profile = profile;
     }
 
