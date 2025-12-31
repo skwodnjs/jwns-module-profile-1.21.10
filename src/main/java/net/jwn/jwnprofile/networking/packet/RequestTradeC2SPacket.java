@@ -55,7 +55,7 @@ public record RequestTradeC2SPacket(UUID recipient) implements CustomPacketPaylo
                 TradeSessionManager.tradingPlayer.put(context.player().getUUID(), session.id());
                 TradeSessionManager.tradingPlayer.put(data.recipient, session.id());
 
-                RequestTradeS2CPacket packet = new RequestTradeS2CPacket(context.player().getUUID(), context.player().getPlainTextName());
+                RequestTradeS2CPacket packet = new RequestTradeS2CPacket(context.player().getUUID(), context.player().getPlainTextName(), context.player().getPlainTextName());
                 PacketDistributor.sendToPlayer(recipientPlayer, packet);
 
                 player.openMenu(session, buf -> {

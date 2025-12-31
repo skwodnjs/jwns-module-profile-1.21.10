@@ -25,5 +25,6 @@
   "jwnprofile.profile.cannot_while_trading": "You cannot do this while trading.",
   "jwnprofile.profile.other_player_already_trading": "The other player is already in another trade.",
   "jwnprofile.trade.canceled": "The trade has been canceled.",
-  "jwnprofile.trade.not_safe": "You cannot trade because there are monsters nearby."
+  "jwnprofile.trade.not_safe": "You cannot trade because there are monsters nearby.",
+  "jwnprofile.message.trade.requested": "%s has requested a trade."
 }

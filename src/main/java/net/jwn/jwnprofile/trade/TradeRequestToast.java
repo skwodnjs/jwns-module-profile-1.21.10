@@ -86,7 +86,7 @@ public class TradeRequestToast implements Toast {
             );
         }
 
-        Component text = Component.literal(name + "님이 교환을 요청하였습니다.");
+        Component text = Component.translatable("jwnprofile.message.trade.requested", name);
         int maxWidth = 118;
         List<FormattedCharSequence> lines = Functions.wrapByCharacter(text, maxWidth, font);
         int lineHeight = font.lineHeight;

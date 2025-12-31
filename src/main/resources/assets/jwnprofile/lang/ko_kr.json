@@ -25,5 +25,6 @@
   "jwnprofile.profile.cannot_while_trading": "거래중에는 할 수 없습니다.",
   "jwnprofile.profile.other_player_already_trading": "상대방이 다른 거래중입니다.",
   "jwnprofile.trade.canceled": "교환이 취소되었습니다.",
-  "jwnprofile.trade.not_safe": "근처에 몬스터가 있어 거래를 할 수 없습니다."
+  "jwnprofile.trade.not_safe": "근처에 몬스터가 있어 거래를 할 수 없습니다.",
+  "jwnprofile.message.trade.requested": "%s 님이 교환을 요청하였습니다."
 }
