@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,28 +36,21 @@ public class TradeSessionManager {
     }
 
     public static void sessionClose(TradeSession session, MinecraftServer server) {
+        tradingPlayer.remove(session.playerA());
+        tradingPlayer.remove(session.playerB());
+
         ServerPlayer playerA = server.getPlayerList().getPlayer(session.playerA());
-        if (playerA != null) {
-            tradingPlayer.remove(playerA.getUUID());
-            giveOfferToPlayer(playerA, session.offerA());
-        }
-
-        if (playerA != null && playerA.containerMenu instanceof TradeMenu) {
-            playerA.closeContainer();
-        }
-
         ServerPlayer playerB = server.getPlayerList().getPlayer(session.playerB());
+
+        if (playerA != null) giveOfferToPlayer(playerA, session.offerA());
         if (playerB != null) {
             CloseTradeToastS2CPacket packet = new CloseTradeToastS2CPacket();
             PacketDistributor.sendToPlayer(playerB, packet);
-            tradingPlayer.remove(playerB.getUUID());
             giveOfferToPlayer(playerB, session.offerB());
         }
 
-        if (playerB != null && playerB.containerMenu instanceof TradeMenu) {
-            playerB.closeContainer();
-        }
-
+        if (playerA != null && playerA.containerMenu instanceof TradeMenu) playerA.closeContainer();
+        if (playerB != null && playerB.containerMenu instanceof TradeMenu) playerB.closeContainer();
         SESSIONS.remove(session.id());
     }
 

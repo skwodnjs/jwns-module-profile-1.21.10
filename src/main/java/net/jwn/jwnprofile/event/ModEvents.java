@@ -44,7 +44,7 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void onServerTickEvent(ServerTickEvent.Post event) {
+    public static void checkAllTradeSessionForEveryTick(ServerTickEvent.Post event) {
         List<TradeSession> sessions = new ArrayList<>(TradeSessionManager.SESSIONS.values());
 
         for (TradeSession session : sessions) {
