@@ -1,15 +1,12 @@
 package net.jwn.jwnprofile.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.jwn.jwnprofile.networking.packet.CloseTradeToastS2CPacket;
-import net.jwn.jwnprofile.profile.ProfileData;
 import net.jwn.jwnprofile.trade.TradeSession;
 import net.jwn.jwnprofile.trade.TradeSessionManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -23,30 +20,8 @@ import java.util.Objects;
 public class TradeRequestHandleCommand {
     public TradeRequestHandleCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("trade")
-            .then(Commands.literal("accept")
-                .then(Commands.argument("playerName", StringArgumentType.word())
-                .suggests((ctx, builder) -> {
-                    ProfileData data = ProfileData.get(ctx.getSource().getServer());
-
-                    return SharedSuggestionProvider.suggest(
-                            data.getAllProfiles().stream()
-                                    .map(ProfileData.PlayerProfile::getName),
-                            builder
-                    );
-                })
-                .executes(this::accept)))
-            .then(Commands.literal("reject")
-                .then(Commands.argument("playerName", StringArgumentType.word())
-                .suggests((ctx, builder) -> {
-                    ProfileData data = ProfileData.get(ctx.getSource().getServer());
-
-                    return SharedSuggestionProvider.suggest(
-                            data.getAllProfiles().stream()
-                                    .map(ProfileData.PlayerProfile::getName),
-                            builder
-                    );
-                })
-                .executes(this::reject))));
+            .then(Commands.literal("accept").executes(this::accept))
+            .then(Commands.literal("reject").executes(this::reject)));
     }
 
     private int accept(CommandContext<CommandSourceStack> context) {
@@ -88,8 +63,7 @@ public class TradeRequestHandleCommand {
                         Objects.equals(player.getUUID(), session.playerA()) ? session.playerB() : session.playerA()
                 );
                 if (target != null) target.displayClientMessage(Component.translatable("jwnprofile.profile.trade_rejected"), false);
-                String name = StringArgumentType.getString(context, "playerName");
-                player.displayClientMessage(Component.translatable("jwnsprofilemod.profile.trade_reject", name), false);
+                player.displayClientMessage(Component.translatable("jwnprofile.profile.trade_reject"), false);
             } else {
                 player.displayClientMessage(Component.translatable("jwnprofile.trade.cannot_decline"), false);
             }

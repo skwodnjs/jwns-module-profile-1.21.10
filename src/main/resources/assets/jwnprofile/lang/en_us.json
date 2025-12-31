@@ -17,7 +17,7 @@
   "jwnprofile.profile.cannot_trade_yourself": "You cannot trade with yourself.",
   "jwnprofile.profile.already_trading": "This player is already in a trade.",
   "jwnprofile.trade.title": "Trade",
-  "jwnprofile.profile.trade_reject": "You have declined %s's trade request.",
+  "jwnprofile.profile.trade_reject": "You have declined the trade request.",
   "jwnprofile.profile.trade_rejected": "The other player has declined the trade.",
   "jwnprofile.trade.cannot_accept": "Cannot accept the trade.",
   "jwnprofile.trade.cannot_decline": "Cannot decline the trade.",
