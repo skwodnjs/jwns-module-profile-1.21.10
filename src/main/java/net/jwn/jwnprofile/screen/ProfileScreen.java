@@ -2,7 +2,6 @@ package net.jwn.jwnprofile.screen;
 
 import com.mojang.authlib.GameProfile;
 import net.jwn.jwnprofile.JWNsProfileMod;
-import net.jwn.jwnprofile.networking.packet.ReadAllMessagesC2SPacket;
 import net.jwn.jwnprofile.networking.packet.RequestTradeC2SPacket;
 import net.jwn.jwnprofile.profile.ProfileData;
 import net.jwn.jwnprofile.util.Functions;
@@ -17,11 +16,8 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerSkin;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 import java.time.Duration;

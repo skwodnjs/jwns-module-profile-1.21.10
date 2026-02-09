@@ -2,6 +2,7 @@ package net.jwn.jwnprofile.networking;
 
 import net.jwn.jwnprofile.JWNsProfileMod;
 import net.jwn.jwnprofile.networking.client.CloseTradeToastS2CPacketHandler;
+import net.jwn.jwnprofile.networking.client.OpenPlayerListScreenS2CPacketHandler;
 import net.jwn.jwnprofile.networking.client.OpenProfileScreenS2CPacketHandler;
 import net.jwn.jwnprofile.networking.client.RequestTradeS2CPacketHandler;
 import net.jwn.jwnprofile.networking.packet.*;
@@ -31,7 +32,17 @@ public class ModMessages {
                 CloseTradeToastS2CPacket.STREAM_CODEC,
                 CloseTradeToastS2CPacket::handle
         );
+        registrar.playBidirectional(
+                OpenPlayerListScreenS2CPacket.TYPE,
+                OpenPlayerListScreenS2CPacket.STREAM_CODEC,
+                OpenPlayerListScreenS2CPacket::handle
+        );
 
+        registrar.playToServer(
+                RequestPlayerListScreenC2SPacket.TYPE,
+                RequestPlayerListScreenC2SPacket.STREAM_CODEC,
+                RequestPlayerListScreenC2SPacket::handle
+        );
         registrar.playToServer(
                 EditAboutMeC2SPacket.TYPE,
                 EditAboutMeC2SPacket.STREAM_CODEC,
@@ -77,6 +88,10 @@ public class ModMessages {
         event.register(
                 CloseTradeToastS2CPacket.TYPE,
                 CloseTradeToastS2CPacketHandler::handle
+        );
+        event.register(
+                OpenPlayerListScreenS2CPacket.TYPE,
+                OpenPlayerListScreenS2CPacketHandler::handle
         );
     }
 }

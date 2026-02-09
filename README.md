@@ -1,25 +1,107 @@
+# JWN's Profile Mod
 
-Installation information
-=======
+## 개요
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+개인 프로필을 추가하는 모드.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+## Github Link
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+<a href="https://github.com/skwodnjs/jwns-module-profile-1.21.10" target="_blank">https://github.com/skwodnjs/jwns-module-profile-1.21.10</a>
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+## 버전 정보
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+- NeoForge 전용
+- 마인크래프트 버전: 1.21.10 (NeoForge 버전 21.10.63 이상)
+
+## 상세
+
+<small>* 2025. 12. 31. Last Updated</small>
+
+### 개인 프로필
+
+인게임 명령어 <code>/profile <플레이어 이름></code>을 통해 플레이어의 프로필을 확인할 수 있습니다.
+
+<img src="../assets/img/20251227_001.png" alt="20251227_001.png" width="700px">
+
+프로필에서는 다음과 같은 내용을 확인할 수 있습니다.
+
+- 플레이어 이름
+- 레벨
+- 마지막 접속 시간
+- 자기소개
+
+또한 다음 기능을 사용할 수 있습니다.
+
+#### 쪽지 보내기
+
+플레이어에게 쪽지를 보낼 수 있습니다. 쪽지는 상대방의 게임 접속 여부와 상관없이 보낼 수 있습니다.
+
+#### 교환 요청
+
+플레이어에게 교환을 요청합니다.
+상대방 플레이어가 1분 이내에 교환을 수락하지 않으면 교환이 취소됩니다.
+교환 기능은 아래에서 더 자세히 설명합니다.
+
+#### 귓속말
+
+귓속말 버튼을 누르면 채팅창에 <code>/tell <플레이어 이름></code>이 입력됩니다.
+이 인게임 명령어를 이용하면 해당 플레이어에게만 보이는 채팅을 보낼 수 있습니다.
+
+### 교환 기능
+
+프로필의 교환 신청 버튼을 누르면 해당 플레이어에게 교환을 신청할 수 있습니다.
+
+<img src="../assets/img/20251227_002.png" alt="20251227_002.png" width="700px">
+
+또는 다음 명령어를 통해서도 교환을 신청할 수 있습니다.
+
+- <code>/trade request <플레이어 이름></code>
+
+누군가가 교환을 요청하면 toast 알림창을 통해 교환 요청 사실을 확인할 수 있습니다.
+교환을 받은 플레이어가 1분 이내에 교환을 수락하지 않으면 교환은 자동으로 취소됩니다.
+아래 명령어를 통해 교환을 수락하거나 거절할 수 있습니다.
+
+- <code>/trade accept</code>
+- <code>/trade reject</code>
+
+교환을 수락할 경우, 교환 GUI가 열리고 교환을 진행할 수 있습니다.
+
+<img src="../assets/img/20251227_003.png" alt="20251227_003.png" width="700px">
+
+## 버전 기록
+
+### 0.0.1
+
+- 기본 기능 구현 완료
+
+### 0.0.2
+
+- 교환 기능 구현 완료
+
+### 0.0.3
+
+- 교환 매커니즘 변경: 교환창에 아이템을 넣으면 다시 뺄 수 없음
+
+### 0.0.4
+
+- 교환 매커니즘 변경: 근처에 몬스터가 있으면 교환할 수 없음
+- 네더 또는 엔더에서 프로필을 열려고 시도하면 오류가 발생하면서 강제로 게임에서 나가지는 버그 수정
+- 교환중이던 플레이어가 게임을 강제로 종료하는 등 교환가 중단되어야 하는 상황에서 교환가 정상적으로 중단되지 않는 버그 수정
+- 프로필에서 미접속 중인 플레이어 얼굴이 나오지 않는 버그 수정
+- 자기소개 수정 시 기존 자기소개 내용을 기본값으로 두도록 변경
+- 플레이어 이름을 입력해야 하는 명령어에 (미접속 플레이어를 포함하여) 이름을 자동완성할 수 있도록 기능 추가
+
+### 0.0.5
+
+- 방명록 기능 대신 쪽지 보내기 기능으로 변경
+- 교환 수락/거절 명령어에 플레이어 이름을 입력하지 않아도 되도록 변경
+- 교환 요청 명령어 추가
+
+### 0.0.6
+
+- 거래 창에서 왼손에 든 아이템도 보이도록 설정
+- 프로필에서 상대방의 인벤토리를 확인할 수 있도록 설정(비공개 가능)
+- 프로필에서 상대방의 킬 로그 확인 부분 추가
+- 프로필 확인을 명령어 대신 단축키로 변경
+- 전체 방명록, 공유 메모장 페이지 추가
+
